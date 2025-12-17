@@ -1,0 +1,10 @@
+node_modules
+.turbo
+.git
+*.md
+apps/backend/venv
+apps/backend/__pycache__
+apps/frontend/.dart_tool
+apps/frontend/build
+apps/frontend/.packages
+
