@@ -1,12 +1,21 @@
-# Stage 1: Build Flutter Web
+# Stage 1: Turborepo base with Node
+FROM node:20-alpine AS turbo-base
+RUN npm install -g pnpm turbo
+WORKDIR /app
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml turbo.json ./
+COPY apps/backend/package.json ./apps/backend/
+COPY apps/frontend/package.json ./apps/frontend/
+RUN pnpm install --frozen-lockfile
+
+# Stage 2: Build Flutter Web
 FROM ghcr.io/cirruslabs/flutter:stable AS flutter-build
 WORKDIR /app/frontend
 COPY apps/frontend/ .
 RUN flutter pub get
 RUN flutter build web --release
 
-# Stage 2: Build Python Backend + Serve Flutter
-FROM python:3.11-slim
+# Stage 3: Production - Python Backend + Nginx for Flutter
+FROM python:3.11-slim AS production
 WORKDIR /app
 
 # Install nginx
@@ -18,6 +27,9 @@ RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Copy Flutter web build
 COPY --from=flutter-build /app/frontend/build/web /var/www/html
+
+# Copy turbo config for reference/scripts
+COPY --from=turbo-base /app/package.json /app/turbo.json ./
 
 # Nginx config to serve Flutter and proxy API
 RUN echo 'server { \
@@ -53,5 +65,7 @@ nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
 
 EXPOSE 80
 
-CMD ["/start.sh"]
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost/health || exit 1
 
+CMD ["/start.sh"]
