@@ -1,0 +1,121 @@
+# Yashvi Media Studio - Technical Documentation
+
+## Architecture Overview
+
+This project uses a **Turborepo** monorepo structure with:
+
+- **Frontend/Mobile**: Flutter (cross-platform - iOS, Android, Web, Desktop)
+- **Backend**: FastAPI (Python)
+
+## Project Structure
+
+```
+yashvi-media-studio/
+├── apps/
+│   ├── frontend/     # Flutter frontend (iOS, Android, Web, Desktop)
+│   └── backend/         # FastAPI backend
+├── packages/            # Shared packages (if needed)
+├── docs/                # Documentation
+├── turbo.json           # Turborepo configuration
+├── package.json         # Root package.json for Turborepo
+└── README.md
+```
+
+## Technology Stack
+
+### Frontend - Flutter
+- **Framework**: Flutter 3.x
+- **Language**: Dart
+- **State Management**: TBD (Riverpod/Bloc/Provider)
+- **Platforms**: iOS, Android, Web, macOS, Windows, Linux
+
+### Backend - FastAPI
+- **Framework**: FastAPI
+- **Language**: Python 3.11+
+- **Database**: TBD (PostgreSQL recommended)
+- **ORM**: SQLAlchemy / Tortoise ORM
+- **Authentication**: JWT-based auth
+
+## Getting Started
+
+### Prerequisites
+- Node.js 18+ (for Turborepo)
+- Flutter SDK 3.x
+- Python 3.11+
+- pnpm (recommended) or npm
+
+### Installation
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run all apps in development
+pnpm dev
+
+# Run specific app
+pnpm dev --filter=frontend
+pnpm dev --filter=backend
+```
+
+### Flutter App Setup
+
+```bash
+cd apps/frontend
+flutter pub get
+flutter run
+```
+
+### FastAPI Setup
+
+```bash
+cd apps/backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+## Turborepo Commands
+
+| Command | Description |
+|---------|-------------|
+| `pnpm build` | Build all apps |
+| `pnpm dev` | Start all apps in dev mode |
+| `pnpm lint` | Lint all apps |
+| `pnpm test` | Run tests across all apps |
+
+## API Documentation
+
+FastAPI provides automatic API documentation:
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+
+## Environment Variables
+
+### Backend (.env)
+```
+DATABASE_URL=postgresql://user:pass@localhost:5432/yashvi_media
+SECRET_KEY=your-secret-key
+DEBUG=true
+```
+
+### Flutter (.env)
+```
+API_BASE_URL=http://localhost:8000
+```
+
+## Development Workflow
+
+1. Create feature branch from `main`
+2. Make changes in respective app directory
+3. Run `pnpm lint` and `pnpm test`
+4. Submit PR for review
+
+## Deployment
+
+TBD - Add deployment instructions for:
+- Flutter apps (App Store, Play Store, Web hosting)
+- FastAPI backend (Docker, cloud providers)
+
+
