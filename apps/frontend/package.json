@@ -1,0 +1,12 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "/Users/vaisakhprakash/Developer/Instalations/flutter/bin/flutter run -d chrome",
+    "build": "flutter build",
+    "lint": "flutter analyze",
+    "test": "flutter test"
+  }
+}
+
