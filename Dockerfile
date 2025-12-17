@@ -18,8 +18,8 @@ RUN flutter build web --release
 FROM python:3.11-slim AS production
 WORKDIR /app
 
-# Install nginx
-RUN apt-get update && apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+# Install nginx and curl (for healthcheck)
+RUN apt-get update && apt-get install -y nginx curl && rm -rf /var/lib/apt/lists/*
 
 # Copy backend
 COPY apps/backend/ ./backend/
