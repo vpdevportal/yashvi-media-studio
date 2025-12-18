@@ -13,10 +13,15 @@ if [ ! -d "apps/backend/venv" ]; then
     echo "📦 Setting up backend virtual environment..."
     cd apps/backend
     python3 -m venv venv
-    source venv/bin/activate
-    pip install -q -r requirements.txt
     cd "$ROOT_DIR"
 fi
+
+# Always install/update requirements
+echo "📦 Installing backend dependencies..."
+cd apps/backend
+source venv/bin/activate
+pip install -q -r requirements.txt
+cd "$ROOT_DIR"
 
 # Install turbo if needed
 if [ ! -d "node_modules" ]; then
