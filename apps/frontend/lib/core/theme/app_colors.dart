@@ -3,24 +3,32 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Background
-  static const Color background = Color(0xFF0A0A0F);
-  static const Color surface = Color(0xFF1A1A2E);
+  // Background - Rich charcoal with warm undertones
+  static const Color background = Color(0xFF121218);
+  static const Color surface = Color(0xFF1C1C24);
+  static const Color surfaceElevated = Color(0xFF252530);
 
-  // Primary
-  static const Color primary = Color(0xFF6366F1);
-  static const Color primaryLight = Color(0xFF8B5CF6);
+  // Sidebar & Navbar - Elegant dark slate
+  static const Color sidebar = Color(0xFF16161C);
+  static const Color navbar = Color(0xFF18181F);
 
-  // Secondary
-  static const Color secondary = Color(0xFFEC4899);
+  // Primary - Logo lavender (darker)
+  static const Color primary = Color(0xFF8B5FC7);
+  static const Color primaryLight = Color(0xFFAA7DD4);
+
+  // Secondary - Deeper purple
+  static const Color secondary = Color(0xFFB07DE8);
+
+  // Accent - Soft violet
+  static const Color accent = Color(0xFFA78BDA);
 
   // Status
-  static const Color success = Color(0xFF22C55E);
-  static const Color error = Color(0xFFEF4444);
+  static const Color success = Color(0xFF5B9A8B);
+  static const Color error = Color(0xFFD45B5B);
 
   // Text
-  static const Color textPrimary = Colors.white;
-  static const Color textSecondary = Color(0xFFE0E7FF);
-  static const Color textMuted = Color(0xFF9CA3AF);
+  static const Color textPrimary = Color(0xFFF5F5F5);
+  static const Color textSecondary = Color(0xFFD4D4DC);
+  static const Color textMuted = Color(0xFF8B8B99);
 }
 
