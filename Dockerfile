@@ -62,7 +62,7 @@ RUN echo 'server { \
 
 # Start script
 RUN echo '#!/bin/bash\n\
-cd /app/backend && uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
+cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 &\n\
 nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
 
 EXPOSE 80
