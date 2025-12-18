@@ -59,7 +59,7 @@ class ApiService {
         'description': description,
       }),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return Project.fromJson(jsonDecode(response.body));
     }
     throw Exception('Failed to create project');
@@ -67,7 +67,7 @@ class ApiService {
 
   Future<void> deleteProject(String id) async {
     final response = await http.delete(Uri.parse('$baseUrl$apiPrefix/projects/$id'));
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Failed to delete project');
     }
   }

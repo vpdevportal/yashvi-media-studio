@@ -26,6 +26,32 @@ class _CreateProjectDialogState extends State<CreateProjectDialog> {
     super.dispose();
   }
 
+  void _showToast(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 20,
+        right: 20,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.red.shade700,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+    overlay.insert(overlayEntry);
+    Future.delayed(const Duration(seconds: 2), () => overlayEntry.remove());
+  }
+
   Future<void> _createProject() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -41,9 +67,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog> {
       widget.onProjectCreated(project);
       Navigator.of(context).pop();
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create project: $e')),
-      );
+      _showToast(context, 'Failed to create project');
     } finally {
       setState(() => _isLoading = false);
     }
