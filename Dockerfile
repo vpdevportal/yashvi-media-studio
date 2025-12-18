@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y nginx curl && rm -rf /var/lib/apt/lists
 
 # Copy backend
 COPY apps/backend/ ./backend/
+COPY .env ./backend/.env
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Copy Flutter web build
@@ -40,7 +41,8 @@ RUN echo 'server { \
         try_files $uri $uri/ /index.html; \
     } \
     location /api/ { \
-        proxy_pass http://127.0.0.1:8000/; \
+        rewrite ^/api/(.*)$ /$1 break; \
+        proxy_pass http://127.0.0.1:8000; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
     } \
