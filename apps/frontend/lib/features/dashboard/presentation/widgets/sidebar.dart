@@ -55,7 +55,7 @@ class Sidebar extends StatelessWidget {
                         'Yashvi Media',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 22,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 0.3,
                         ),
