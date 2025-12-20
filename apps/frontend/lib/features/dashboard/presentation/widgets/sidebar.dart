@@ -50,9 +50,7 @@ class Sidebar extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [AppColors.primaryLight, AppColors.primary, AppColors.secondary],
-                      ).createShader(bounds),
+                      shaderCallback: (bounds) => AppColors.logoGradient.createShader(bounds),
                       child: const Text(
                         'Yashvi Media',
                         style: TextStyle(
