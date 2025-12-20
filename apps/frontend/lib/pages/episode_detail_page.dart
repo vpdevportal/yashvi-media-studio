@@ -66,7 +66,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                 decoration: BoxDecoration(
                   color: AppColors.navbar,
                   border: Border(
-                    bottom: BorderSide(color: AppColors.primary.withOpacity(0.06)),
+                    bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
                   ),
                 ),
                 child: Row(
@@ -80,7 +80,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.15),
+                        color: AppColors.primary.withValues(alpha:0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
@@ -118,7 +118,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                       decoration: BoxDecoration(
                         color: AppColors.sidebar,
                         border: Border(
-                          right: BorderSide(color: AppColors.primary.withOpacity(0.08)),
+                          right: BorderSide(color: AppColors.primary.withValues(alpha:0.08)),
                         ),
                       ),
                       child: ListView(
@@ -208,13 +208,13 @@ class _SidebarTabState extends State<_SidebarTab> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: widget.isSelected
-                ? AppColors.primary.withOpacity(0.12)
+                ? AppColors.primary.withValues(alpha:0.12)
                 : _isHovered
-                    ? AppColors.surfaceElevated.withOpacity(0.5)
+                    ? AppColors.surfaceElevated.withValues(alpha:0.5)
                     : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: widget.isSelected
-                ? Border.all(color: AppColors.primary.withOpacity(0.25))
+                ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
                 : null,
           ),
           child: Row(

@@ -17,13 +17,13 @@ class StatusCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.08)),
+        border: Border.all(color: Colors.white.withValues(alpha:0.08)),
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.white.withOpacity(0.08),
-            Colors.white.withOpacity(0.02),
+            Colors.white.withValues(alpha:0.08),
+            Colors.white.withValues(alpha:0.02),
           ],
         ),
       ),
@@ -36,9 +36,9 @@ class StatusCard extends StatelessWidget {
             height: 10,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isConnected ? AppColors.success : Colors.white.withOpacity(0.3),
+              color: isConnected ? AppColors.success : Colors.white.withValues(alpha:0.3),
               boxShadow: isConnected
-                  ? [BoxShadow(color: AppColors.success.withOpacity(0.5), blurRadius: 12)]
+                  ? [BoxShadow(color: AppColors.success.withValues(alpha:0.5), blurRadius: 12)]
                   : null,
             ),
           ),
@@ -47,7 +47,7 @@ class StatusCard extends StatelessWidget {
             serverStatus,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha:0.8),
               fontWeight: FontWeight.w500,
             ),
           ),

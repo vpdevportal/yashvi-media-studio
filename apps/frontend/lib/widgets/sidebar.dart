@@ -19,7 +19,7 @@ class Sidebar extends StatelessWidget {
         color: AppColors.sidebar,
         border: Border(
           right: BorderSide(
-            color: AppColors.primary.withOpacity(0.08),
+            color: AppColors.primary.withValues(alpha:0.08),
             width: 1,
           ),
         ),
@@ -33,7 +33,7 @@ class Sidebar extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: AppColors.primary.withOpacity(0.06),
+                  color: AppColors.primary.withValues(alpha:0.06),
                 ),
               ),
             ),
@@ -111,7 +111,7 @@ class Sidebar extends StatelessWidget {
           const Spacer(),
 
           // Bottom section
-          Divider(color: AppColors.primary.withOpacity(0.06), height: 1),
+          Divider(color: AppColors.primary.withValues(alpha:0.06), height: 1),
           _NavItem(
             icon: Icons.settings_outlined,
             activeIcon: Icons.settings,
@@ -161,13 +161,13 @@ class _NavItemState extends State<_NavItem> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: widget.isSelected
-                ? AppColors.primary.withOpacity(0.12)
+                ? AppColors.primary.withValues(alpha:0.12)
                 : _isHovered
-                    ? AppColors.surfaceElevated.withOpacity(0.5)
+                    ? AppColors.surfaceElevated.withValues(alpha:0.5)
                     : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: widget.isSelected
-                ? Border.all(color: AppColors.primary.withOpacity(0.25))
+                ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
                 : null,
           ),
           child: Row(

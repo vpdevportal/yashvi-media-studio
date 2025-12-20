@@ -65,7 +65,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                   labelText: 'Episode Title',
                   labelStyle: const TextStyle(color: AppColors.textMuted),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
+                    borderSide: BorderSide(color: AppColors.primary.withValues(alpha:0.3)),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -83,7 +83,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                   labelText: 'Description (optional)',
                   labelStyle: const TextStyle(color: AppColors.textMuted),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
+                    borderSide: BorderSide(color: AppColors.primary.withValues(alpha:0.3)),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedBorder: OutlineInputBorder(
@@ -150,7 +150,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                 decoration: BoxDecoration(
                   color: AppColors.sidebar,
                   border: Border(
-                    right: BorderSide(color: AppColors.primary.withOpacity(0.08)),
+                    right: BorderSide(color: AppColors.primary.withValues(alpha:0.08)),
                   ),
                 ),
                 child: Column(
@@ -161,7 +161,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: AppColors.primary.withOpacity(0.06)),
+                          bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
                         ),
                       ),
                       child: Row(
@@ -231,7 +231,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                       decoration: BoxDecoration(
                         color: AppColors.navbar,
                         border: Border(
-                          bottom: BorderSide(color: AppColors.primary.withOpacity(0.06)),
+                          bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
                         ),
                       ),
                       child: Row(
@@ -346,7 +346,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
             decoration: BoxDecoration(
               color: AppColors.surface,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+              border: Border.all(color: AppColors.primary.withValues(alpha:0.1)),
             ),
             child: Text(
               widget.project.description ?? 'No description provided.',
@@ -379,7 +379,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
             Icon(
               Icons.video_library_outlined,
               size: 64,
-              color: AppColors.textMuted.withOpacity(0.5),
+              color: AppColors.textMuted.withValues(alpha:0.5),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -434,7 +434,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           Icon(
             Icons.people_outline,
             size: 64,
-            color: AppColors.textMuted.withOpacity(0.5),
+            color: AppColors.textMuted.withValues(alpha:0.5),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -454,7 +454,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           Icon(
             Icons.settings_outlined,
             size: 64,
-            color: AppColors.textMuted.withOpacity(0.5),
+            color: AppColors.textMuted.withValues(alpha:0.5),
           ),
           const SizedBox(height: 16),
           const Text(
@@ -508,13 +508,13 @@ class _SidebarTabState extends State<_SidebarTab> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: widget.isSelected
-                ? AppColors.primary.withOpacity(0.12)
+                ? AppColors.primary.withValues(alpha:0.12)
                 : _isHovered
-                    ? AppColors.surfaceElevated.withOpacity(0.5)
+                    ? AppColors.surfaceElevated.withValues(alpha:0.5)
                     : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: widget.isSelected
-                ? Border.all(color: AppColors.primary.withOpacity(0.25))
+                ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
                 : null,
           ),
           child: Row(
@@ -539,7 +539,7 @@ class _SidebarTabState extends State<_SidebarTab> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withOpacity(0.2),
+                    color: AppColors.primary.withValues(alpha:0.2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -579,7 +579,7 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha:0.2)),
       ),
       child: Row(
         children: [
@@ -587,7 +587,7 @@ class _StatCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: color, size: 22),
@@ -655,7 +655,7 @@ class _PrimaryButtonState extends State<_PrimaryButton> {
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.4),
+                      color: AppColors.primary.withValues(alpha:0.4),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -708,7 +708,7 @@ class _EpisodeCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+            border: Border.all(color: AppColors.primary.withValues(alpha:0.15)),
           ),
           child: Row(
         children: [
@@ -716,7 +716,7 @@ class _EpisodeCard extends StatelessWidget {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.15),
+              color: AppColors.primary.withValues(alpha:0.15),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Center(

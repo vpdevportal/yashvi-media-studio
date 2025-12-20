@@ -126,7 +126,7 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
         decoration: InputDecoration(
           hintText: 'Write your story here...',
           hintStyle: TextStyle(
-            color: AppColors.textMuted.withOpacity(0.5),
+            color: AppColors.textMuted.withValues(alpha:0.5),
             fontSize: 15,
           ),
           border: InputBorder.none,

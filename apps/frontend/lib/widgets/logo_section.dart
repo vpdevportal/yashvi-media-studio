@@ -28,7 +28,7 @@ class LogoSection extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.primary.withOpacity(0.3 + pulseController.value * 0.2),
+                    color: AppColors.primary.withValues(alpha:  0.3 + pulseController.value * 0.2),
                     blurRadius: 40 + pulseController.value * 20,
                     spreadRadius: 5,
                   ),
@@ -65,7 +65,7 @@ class LogoSection extends StatelessWidget {
             fontSize: 14,
             fontWeight: FontWeight.w500,
             letterSpacing: 8,
-            color: Colors.white.withOpacity(0.5),
+            color: Colors.white.withValues(alpha: 0.5),
           ),
         ),
         const SizedBox(height: 24),
@@ -74,14 +74,14 @@ class LogoSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
-            color: Colors.white.withOpacity(0.03),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            color: Colors.white.withValues(alpha: 0.03),
           ),
           child: Text(
             'Create • Inspire • Transform',
             style: TextStyle(
               fontSize: 13,
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha: 0.6),
               letterSpacing: 2,
             ),
           ),

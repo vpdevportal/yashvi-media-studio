@@ -23,19 +23,19 @@ class PlatformPills extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
-        color: Colors.white.withOpacity(0.03),
+        border: Border.all(color: Colors.white.withValues(alpha:0.1)),
+        color: Colors.white.withValues(alpha:0.03),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: Colors.white.withOpacity(0.6)),
+          Icon(icon, size: 16, color: Colors.white.withValues(alpha:0.6)),
           const SizedBox(width: 8),
           Text(
             label,
             style: TextStyle(
               fontSize: 13,
-              color: Colors.white.withOpacity(0.6),
+              color: Colors.white.withValues(alpha:0.6),
               fontWeight: FontWeight.w500,
             ),
           ),

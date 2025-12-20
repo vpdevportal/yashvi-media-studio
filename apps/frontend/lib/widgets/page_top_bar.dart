@@ -18,7 +18,7 @@ class PageTopBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32),
       decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: AppColors.primary.withOpacity(0.06)),
+          bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
         ),
       ),
       child: Row(

@@ -56,7 +56,7 @@ class ProjectCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+            border: Border.all(color: AppColors.primary.withValues(alpha:0.2)),
           ),
           child: Padding(
         padding: const EdgeInsets.all(20),
@@ -120,7 +120,7 @@ class ProjectCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: _getStatusColor().withOpacity(0.15),
+                color: _getStatusColor().withValues(alpha:0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(

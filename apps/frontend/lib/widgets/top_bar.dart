@@ -23,7 +23,7 @@ class TopBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.navbar,
         border: Border(
-          bottom: BorderSide(color: AppColors.primary.withOpacity(0.06)),
+          bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
         ),
       ),
       child: Row(
@@ -145,7 +145,7 @@ class _ActionButtonState extends State<_ActionButton> {
               color: _isHovered ? AppColors.surface : Colors.transparent,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                color: _isHovered ? AppColors.primary.withOpacity(0.2) : Colors.transparent,
+                color: _isHovered ? AppColors.primary.withValues(alpha:0.2) : Colors.transparent,
               ),
             ),
             child: Icon(
@@ -199,7 +199,7 @@ class _PrimaryButtonState extends State<_PrimaryButton> {
             boxShadow: _isHovered
                 ? [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.4),
+                      color: AppColors.primary.withValues(alpha:0.4),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
