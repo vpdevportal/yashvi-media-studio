@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import '../models/project.dart';
 import '../models/episode.dart';
+import '../models/story.dart';
 
 class ApiService {
   // Check if we're in production (served from port 80/443) or dev
@@ -111,6 +112,29 @@ class ApiService {
     if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Failed to delete episode');
     }
+  }
+
+  // Story endpoints
+  Future<Story> getStoryByEpisode(String episodeId) async {
+    final response = await http.get(Uri.parse('$baseUrl$apiPrefix/stories/episode/$episodeId'));
+    if (response.statusCode == 200) {
+      return Story.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Failed to load story');
+  }
+
+  Future<Story> updateStory(String episodeId, String content) async {
+    final response = await http.patch(
+      Uri.parse('$baseUrl$apiPrefix/stories/episode/$episodeId'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'content': content,
+      }),
+    );
+    if (response.statusCode == 200) {
+      return Story.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Failed to update story');
   }
 }
 
