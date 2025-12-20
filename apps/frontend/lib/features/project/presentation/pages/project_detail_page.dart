@@ -4,6 +4,7 @@ import '../../../../core/models/project.dart';
 import '../../../../core/models/episode.dart';
 import '../../../../core/services/api_service.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../episode/presentation/pages/episode_detail_page.dart';
 
 class ProjectDetailPage extends StatefulWidget {
   final Project project;
@@ -690,15 +691,26 @@ class _EpisodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.15)),
-      ),
-      child: Row(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EpisodeDetailPage(episode: episode),
+          ),
+        );
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.primary.withOpacity(0.15)),
+          ),
+          child: Row(
         children: [
           Container(
             width: 48,
@@ -750,6 +762,8 @@ class _EpisodeCard extends StatelessWidget {
             tooltip: 'Delete episode',
           ),
         ],
+      ),
+        ),
       ),
     );
   }
