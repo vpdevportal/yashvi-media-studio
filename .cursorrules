@@ -9,6 +9,30 @@
 - **Interactions**: Include keyboard shortcuts (Ctrl+N, Ctrl+R, etc.) for power users
 - **Components**: Prefer desktop patterns like hover states, tooltips, context menus, and modal dialogs
 
+## Project Vision & Ultimate Goal
+
+**End-to-End Animation Video Generation Pipeline:**
+
+The ultimate plan for this project is to convert a story to an animation full video. The workflow is:
+
+1. **Story Input**: User manually inputs the story
+2. **AI Storyboard Generation**: Use AI to generate storyboard from the story
+3. **Scene Image Generation**: For each scene, generate an image using AI
+4. **Audio Generation**: Use AI tools to generate audio components:
+   - **Dialogues/Voice Overs**: Generate character dialogues and voice-overs for each scene
+   - **Background Music**: Generate or select appropriate background music for scenes
+5. **Scene Video Generation**: Give each generated image to video generation AI tool to create short video of that scene
+6. **Video Assembly**: Join these shorts together with synchronized audio (dialogues, voice-overs, and background music) to make full video
+
+**Technical Considerations:**
+- All AI integrations (storyboard generation, image generation, audio generation, video generation) should be designed as modular services
+- Consider rate limits, API costs, and processing time for AI operations
+- Implement proper error handling and retry logic for AI API calls
+- Store intermediate artifacts (storyboards, images, audio files, scene videos) for review and regeneration
+- Support manual review and editing at each stage before proceeding to the next
+- Audio synchronization: Ensure proper timing and synchronization of dialogues/voice-overs with video scenes
+- Audio mixing: Handle mixing of multiple audio tracks (dialogues, voice-overs, background music) with proper volume levels
+
 ## Tech Stack
 
 - **Frontend**: Flutter (macOS/Web)
