@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../core/models/episode.dart';
+import '../core/models/story.dart';
+import '../core/services/api_service.dart';
 import '../core/theme/app_colors.dart';
 import 'episode_detail/episode_screenplay_tab.dart';
 import 'episode_detail/episode_shorts_tab.dart';
@@ -19,6 +21,10 @@ class EpisodeDetailPage extends StatefulWidget {
 class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
   int _selectedTab = 0;
   final PageController _pageController = PageController();
+  final ApiService _apiService = ApiService();
+  Story? _story;
+  bool _isStoryLoading = true;
+  String? _storyError;
 
   final List<_TabItem> _tabs = const [
     _TabItem(icon: Icons.auto_stories_outlined, activeIcon: Icons.auto_stories, label: 'Story'),
@@ -28,9 +34,56 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadStory();
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadStory() async {
+    setState(() {
+      _isStoryLoading = true;
+      _storyError = null;
+    });
+
+    try {
+      final story = await _apiService.getStoryByEpisode(widget.episode.id);
+      setState(() {
+        _story = story;
+        _isStoryLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _storyError = e.toString().replaceAll('Exception: ', '');
+        _isStoryLoading = false;
+      });
+    }
+  }
+
+  Future<void> _updateStory(String content) async {
+    setState(() {
+      _isStoryLoading = true;
+      _storyError = null;
+    });
+
+    try {
+      final updatedStory = await _apiService.updateStory(widget.episode.id, content);
+      setState(() {
+        _story = updatedStory;
+        _isStoryLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _storyError = e.toString().replaceAll('Exception: ', '');
+        _isStoryLoading = false;
+      });
+      rethrow;
+    }
   }
 
   void _onTabSelected(int index) {
@@ -142,7 +195,14 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                         onPageChanged: _onPageChanged,
                         scrollDirection: Axis.horizontal,
                         children: [
-                          EpisodeStoryTab(episode: widget.episode),
+                          EpisodeStoryTab(
+                            episode: widget.episode,
+                            story: _story,
+                            isLoading: _isStoryLoading,
+                            error: _storyError,
+                            onUpdate: _updateStory,
+                            onRetry: _loadStory,
+                          ),
                           const EpisodeScreenplayTab(),
                           const EpisodeSnapshotsTab(),
                           const EpisodeShortsTab(),
