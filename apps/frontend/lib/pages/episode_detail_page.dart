@@ -224,7 +224,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
 
   Widget _buildStoryView() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
       child: _savedStory.isEmpty
           ? _buildEmptyState('Story content', Icons.auto_stories_outlined)
           : Text(
@@ -240,7 +240,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
 
   Widget _buildStoryEditor() {
     return Container(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
       child: TextField(
         controller: _storyController,
         autofocus: true,
@@ -271,7 +271,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
         const PageTopBar(title: 'Screenplay'),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
             child: _buildEmptyState('Screenplay content', Icons.description_outlined),
           ),
         ),
@@ -285,7 +285,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
         const PageTopBar(title: 'Snapshots'),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
             child: _buildEmptyState('Snapshots', Icons.camera_alt_outlined),
           ),
         ),
@@ -299,7 +299,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
         const PageTopBar(title: 'Shorts'),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
             child: _buildEmptyState('Shorts', Icons.movie_outlined),
           ),
         ),
