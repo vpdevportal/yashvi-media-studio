@@ -1,0 +1,70 @@
+# Yashvi Media Studio - Cursor Rules
+
+## UI/UX Design Preferences
+
+- **Target Platform**: Web and Desktop (macOS) - NOT mobile-first
+- **Layout Style**: Dashboard-style layouts with sidebars, multi-column designs
+- **Navigation**: Use sidebar navigation, top bars, and breadcrumbs instead of bottom navigation or mobile patterns
+- **Screen Optimization**: Design for larger screens (1200px+ width)
+- **Interactions**: Include keyboard shortcuts (Ctrl+N, Ctrl+R, etc.) for power users
+- **Components**: Prefer desktop patterns like hover states, tooltips, context menus, and modal dialogs
+
+## Tech Stack
+
+- **Frontend**: Flutter (macOS/Web)
+- **Backend**: Python FastAPI
+- **Database**: PostgreSQL (always, never SQLite)
+
+## Code Style
+
+- Use Material 3 design system
+- Follow Flutter best practices with proper widget separation
+- Keep theme colors in `app_colors.dart`
+- Use gradient accents matching the purple/teal theme
+
+## Project Structure
+
+```
+yashvi-media-studio/
+├── apps/
+│   ├── frontend/           # Flutter frontend (macOS, Web)
+│   └── backend/            # FastAPI backend
+├── packages/               # Shared packages (if needed)
+├── docs/                   # Documentation
+├── turbo.json              # Turborepo configuration
+└── package.json            # Root package.json for Turborepo
+```
+
+## Backend Architecture
+
+Layered architecture pattern:
+- **API (endpoints)**: HTTP request handling, routing, input validation
+- **Services**: Business logic, orchestration
+- **Repositories**: Data access, database operations
+- **Models**: SQLAlchemy ORM entity definitions
+- **Schemas**: Pydantic DTOs for API request/response
+
+## Frontend Architecture
+
+Feature-based structure:
+- `lib/core/` - Theme, models, services, utilities
+- `lib/features/` - Feature modules (dashboard, project, etc.)
+- Each feature has: `presentation/pages/`, `presentation/widgets/`
+
+## Development Commands
+
+```bash
+# Run all apps
+pnpm dev
+
+# Flutter
+cd apps/frontend && flutter run -d macos
+
+# Backend
+cd apps/backend && uvicorn app.main:app --reload
+```
+
+## API Documentation
+
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`

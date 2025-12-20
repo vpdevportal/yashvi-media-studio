@@ -12,58 +12,14 @@ This project uses a **Turborepo** monorepo structure with:
 ```
 yashvi-media-studio/
 ├── apps/
-│   ├── frontend/           # Flutter frontend (iOS, Android, Web, Desktop)
-│   └── backend/            # FastAPI backend (see Backend Architecture below)
-├── packages/               # Shared packages (if needed)
-├── docs/                   # Documentation
-├── turbo.json              # Turborepo configuration
-├── package.json            # Root package.json for Turborepo
-├── Dockerfile              # Production Docker image
-├── .env                    # Environment variables
+│   ├── frontend/     # Flutter frontend (iOS, Android, Web, Desktop)
+│   └── backend/         # FastAPI backend
+├── packages/            # Shared packages (if needed)
+├── docs/                # Documentation
+├── turbo.json           # Turborepo configuration
+├── package.json         # Root package.json for Turborepo
 └── README.md
 ```
-
-## Backend Architecture
-
-The backend follows a clean layered architecture pattern:
-
-```
-apps/backend/
-├── app/
-│   ├── api/
-│   │   └── v1/
-│   │       ├── endpoints/
-│   │       │   ├── health.py       # Health check endpoints
-│   │       │   └── projects.py     # Project CRUD endpoints
-│   │       └── router.py           # API router
-│   ├── core/
-│   │   └── config.py               # Settings/configuration
-│   ├── db/
-│   │   ├── base.py                 # Base model exports
-│   │   └── session.py              # Database session management
-│   ├── models/
-│   │   └── project.py              # SQLAlchemy ORM models
-│   ├── repositories/
-│   │   └── project.py              # Data access layer
-│   ├── schemas/
-│   │   └── project.py              # Pydantic request/response schemas
-│   ├── services/
-│   │   └── project.py              # Business logic layer
-│   └── main.py                     # FastAPI app entry point
-├── requirements.txt
-└── package.json
-```
-
-### Layer Responsibilities
-
-| Layer | Purpose |
-|-------|---------|
-| **API (endpoints)** | HTTP request handling, routing, input validation |
-| **Services** | Business logic, orchestration |
-| **Repositories** | Data access, database operations |
-| **Models** | SQLAlchemy ORM entity definitions |
-| **Schemas** | Pydantic DTOs for API request/response |
-| **Core** | Configuration, settings, utilities |
 
 ## Technology Stack
 
@@ -75,12 +31,10 @@ apps/backend/
 
 ### Backend - FastAPI
 - **Framework**: FastAPI
-- **Language**: Python 3.13+
-- **Database**: PostgreSQL
-- **ORM**: SQLAlchemy 2.0
-- **Database Driver**: psycopg3
-- **Validation**: Pydantic v2
-- **Authentication**: JWT-based auth (TBD)
+- **Language**: Python 3.11+
+- **Database**: TBD (PostgreSQL recommended)
+- **ORM**: SQLAlchemy / Tortoise ORM
+- **Authentication**: JWT-based auth
 
 ## Getting Started
 
@@ -119,7 +73,7 @@ cd apps/backend
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload
+uvicorn main:app --reload
 ```
 
 ## Turborepo Commands
