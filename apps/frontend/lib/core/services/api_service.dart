@@ -136,5 +136,18 @@ class ApiService {
     }
     throw Exception('Failed to update story');
   }
+
+  // Screenplay endpoints
+  Future<List<String>> generateScreenplay(String episodeId) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl$apiPrefix/screenplays/episode/$episodeId/generate'),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((item) => item.toString()).toList();
+    }
+    throw Exception('Failed to generate screenplay');
+  }
 }
 
