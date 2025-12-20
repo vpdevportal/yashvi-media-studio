@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y nginx curl && rm -rf /var/lib/apt/lists
 
 # Copy backend
 COPY apps/backend/ ./backend/
-COPY .env ./backend/.env
+# .env file should be provided via environment variables in deployment
+# COPY .env ./backend/.env
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
 # Copy Flutter web build
@@ -42,27 +43,27 @@ RUN echo 'server { \
     } \
     location /api/ { \
         rewrite ^/api/(.*)$ /$1 break; \
-        proxy_pass http://127.0.0.1:8000; \
+        proxy_pass http://127.0.0.1:6005; \
         proxy_set_header Host $host; \
         proxy_set_header X-Real-IP $remote_addr; \
     } \
     location /ping { \
-        proxy_pass http://127.0.0.1:8000/ping; \
+        proxy_pass http://127.0.0.1:6005/ping; \
     } \
     location /health { \
-        proxy_pass http://127.0.0.1:8000/health; \
+        proxy_pass http://127.0.0.1:6005/health; \
     } \
     location /docs { \
-        proxy_pass http://127.0.0.1:8000/docs; \
+        proxy_pass http://127.0.0.1:6005/docs; \
     } \
     location /openapi.json { \
-        proxy_pass http://127.0.0.1:8000/openapi.json; \
+        proxy_pass http://127.0.0.1:6005/openapi.json; \
     } \
 }' > /etc/nginx/sites-available/default
 
 # Start script
 RUN echo '#!/bin/bash\n\
-cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 &\n\
+cd /app/backend && uvicorn app.main:app --host 0.0.0.0 --port 6005 &\n\
 nginx -g "daemon off;"' > /start.sh && chmod +x /start.sh
 
 EXPOSE 80
