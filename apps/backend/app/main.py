@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.v1.router import api_router
 from app.db import engine, Base
+from app.models.story import Story  # Import to register with Base
 
 # Create tables
 Base.metadata.create_all(bind=engine)

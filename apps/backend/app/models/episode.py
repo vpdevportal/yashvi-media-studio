@@ -20,6 +20,7 @@ class Episode(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     project = relationship("Project", back_populates="episodes")
+    story = relationship("Story", back_populates="episode", uselist=False, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Episode {self.episode_number}: {self.title}>"
