@@ -4,6 +4,8 @@ from uuid import UUID
 
 from app.repositories.episode import EpisodeRepository
 from app.schemas.episode import EpisodeCreate, EpisodeUpdate, EpisodeResponse
+from app.services.story import StoryService
+from app.schemas.story import StoryCreate
 
 
 class EpisodeService:
@@ -22,7 +24,13 @@ class EpisodeService:
 
     def create_episode(self, episode_data: EpisodeCreate) -> EpisodeResponse:
         episode = self.repository.create(episode_data)
-        return EpisodeResponse.model_validate(episode)
+        episode_response = EpisodeResponse.model_validate(episode)
+        
+        # Auto-create empty story for the episode
+        story_service = StoryService(self.repository.db)
+        story_service.create_story(StoryCreate(episode_id=episode.id, content=None))
+        
+        return episode_response
 
     def update_episode(self, episode_id: UUID, episode_data: EpisodeUpdate) -> Optional[EpisodeResponse]:
         episode = self.repository.update(episode_id, episode_data)
