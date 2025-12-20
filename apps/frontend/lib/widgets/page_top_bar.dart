@@ -14,7 +14,8 @@ class PageTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+      height: 64,
+      padding: const EdgeInsets.symmetric(horizontal: 32),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.primary.withOpacity(0.06)),
