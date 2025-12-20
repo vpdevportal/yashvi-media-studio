@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../core/models/episode.dart';
 import '../core/theme/app_colors.dart';
-import '../widgets/page_top_bar.dart';
+import 'episode_detail/episode_screenplay_tab.dart';
+import 'episode_detail/episode_shorts_tab.dart';
+import 'episode_detail/episode_snapshots_tab.dart';
+import 'episode_detail/episode_story_tab.dart';
 
 class EpisodeDetailPage extends StatefulWidget {
   final Episode episode;
@@ -16,9 +19,6 @@ class EpisodeDetailPage extends StatefulWidget {
 class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
   int _selectedTab = 0;
   final PageController _pageController = PageController();
-  final TextEditingController _storyController = TextEditingController();
-  bool _isStoryEditMode = false;
-  String _savedStory = '';
 
   final List<_TabItem> _tabs = const [
     _TabItem(icon: Icons.auto_stories_outlined, activeIcon: Icons.auto_stories, label: 'Story'),
@@ -30,23 +30,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
   @override
   void dispose() {
     _pageController.dispose();
-    _storyController.dispose();
     super.dispose();
-  }
-
-  void _saveStory() {
-    setState(() {
-      _savedStory = _storyController.text;
-      _isStoryEditMode = false;
-    });
-    // TODO: API integration - save story to backend
-  }
-
-  void _cancelStoryEdit() {
-    setState(() {
-      _storyController.text = _savedStory;
-      _isStoryEditMode = false;
-    });
   }
 
   void _onTabSelected(int index) {
@@ -158,10 +142,10 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                         onPageChanged: _onPageChanged,
                         scrollDirection: Axis.horizontal,
                         children: [
-                          _buildStory(),
-                          _buildScreenplay(),
-                          _buildSnapshots(),
-                          _buildShorts(),
+                          EpisodeStoryTab(episode: widget.episode),
+                          const EpisodeScreenplayTab(),
+                          const EpisodeSnapshotsTab(),
+                          const EpisodeShortsTab(),
                         ],
                       ),
                     ),
@@ -175,163 +159,6 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
     );
   }
 
-  Widget _buildStory() {
-    return Column(
-      children: [
-        PageTopBar(
-          title: 'Story',
-          actions: _isStoryEditMode
-              ? [
-                  TextButton(
-                    onPressed: _cancelStoryEdit,
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(color: AppColors.textMuted),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _saveStory,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                    ),
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ]
-              : [
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined, color: AppColors.textSecondary),
-                    onPressed: () {
-                      setState(() {
-                        _isStoryEditMode = true;
-                        _storyController.text = _savedStory;
-                      });
-                    },
-                    tooltip: 'Edit story',
-                  ),
-                ],
-        ),
-        // Story content area
-        Expanded(
-          child: _isStoryEditMode ? _buildStoryEditor() : _buildStoryView(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildStoryView() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-      child: _savedStory.isEmpty
-          ? _buildEmptyState('Story content', Icons.auto_stories_outlined)
-          : Text(
-              _savedStory,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 15,
-                height: 1.8,
-              ),
-            ),
-    );
-  }
-
-  Widget _buildStoryEditor() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-      child: TextField(
-        controller: _storyController,
-        autofocus: true,
-        maxLines: null,
-        expands: true,
-        style: const TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 15,
-          height: 1.8,
-        ),
-        decoration: InputDecoration(
-          hintText: 'Write your story here...',
-          hintStyle: TextStyle(
-            color: AppColors.textMuted.withOpacity(0.5),
-            fontSize: 15,
-          ),
-          border: InputBorder.none,
-          filled: true,
-          fillColor: AppColors.surface,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildScreenplay() {
-    return Column(
-      children: [
-        const PageTopBar(title: 'Screenplay'),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-            child: _buildEmptyState('Screenplay content', Icons.description_outlined),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSnapshots() {
-    return Column(
-      children: [
-        const PageTopBar(title: 'Snapshots'),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-            child: _buildEmptyState('Snapshots', Icons.camera_alt_outlined),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildShorts() {
-    return Column(
-      children: [
-        const PageTopBar(title: 'Shorts'),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-            child: _buildEmptyState('Shorts', Icons.movie_outlined),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmptyState(String title, IconData icon) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(64),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.primary.withOpacity(0.1)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 64, color: AppColors.textMuted.withOpacity(0.5)),
-          const SizedBox(height: 16),
-          Text(
-            'No $title yet',
-            style: const TextStyle(
-              color: AppColors.textMuted,
-              fontSize: 16,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _TabItem {
