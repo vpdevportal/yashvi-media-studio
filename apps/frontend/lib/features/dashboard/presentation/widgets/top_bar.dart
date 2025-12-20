@@ -190,11 +190,11 @@ class _PrimaryButtonState extends State<_PrimaryButton> {
           height: 40,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: _isHovered
-                  ? [AppColors.primaryLight, AppColors.primary]
-                  : [AppColors.primary, AppColors.primaryLight],
-            ),
+            gradient: _isHovered
+                ? const LinearGradient(
+                    colors: [AppColors.primaryLight, AppColors.primary, AppColors.accent],
+                  )
+                : AppColors.primaryGradient,
             borderRadius: BorderRadius.circular(8),
             boxShadow: _isHovered
                 ? [

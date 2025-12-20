@@ -3,32 +3,56 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // Background - Rich charcoal with warm undertones
-  static const Color background = Color(0xFF121218);
-  static const Color surface = Color(0xFF1C1C24);
-  static const Color surfaceElevated = Color(0xFF252530);
+  // Background - Deep rich purple-black to complement logo
+  static const Color background = Color(0xFF0D0A14);
+  static const Color surface = Color(0xFF1A1326);
+  static const Color surfaceElevated = Color(0xFF241D35);
 
-  // Sidebar & Navbar - Elegant dark slate
-  static const Color sidebar = Color(0xFF16161C);
-  static const Color navbar = Color(0xFF18181F);
+  // Sidebar & Navbar - Deep purple tones matching logo
+  static const Color sidebar = Color(0xFF140F1C);
+  static const Color navbar = Color(0xFF181223);
 
-  // Primary - Logo lavender (darker)
-  static const Color primary = Color(0xFF8B5FC7);
-  static const Color primaryLight = Color(0xFFAA7DD4);
+  // Primary - Deep purple from logo (#470E6F)
+  static const Color primary = Color(0xFF5A1A8F);
+  static const Color primaryLight = Color(0xFF722590);
+  static const Color primaryDark = Color(0xFF470E6F);
 
-  // Secondary - Deeper purple
-  static const Color secondary = Color(0xFFB07DE8);
+  // Secondary - Vibrant orange/yellow from logo (#F19B21, #FDC90A)
+  static const Color secondary = Color(0xFFF19B21);
+  static const Color secondaryLight = Color(0xFFFDC90A);
+  static const Color secondaryDark = Color(0xFFE5890F);
 
-  // Accent - Soft violet
-  static const Color accent = Color(0xFFA78BDA);
+  // Accent - Purple gradient from logo
+  static const Color accent = Color(0xFF8230AA);
+  static const Color accentLight = Color(0xFF9B3FC4);
 
-  // Status
-  static const Color success = Color(0xFF5B9A8B);
-  static const Color error = Color(0xFFD45B5B);
+  // Status colors - Harmonious with theme
+  static const Color success = Color(0xFF22C55E);
+  static const Color error = Color(0xFFEF4444);
+  static const Color warning = Color(0xFFFDC90A);
+  static const Color info = Color(0xFF722590);
 
   // Text
-  static const Color textPrimary = Color(0xFFF5F5F5);
-  static const Color textSecondary = Color(0xFFD4D4DC);
-  static const Color textMuted = Color(0xFF8B8B99);
-}
+  static const Color textPrimary = Color(0xFFFAFAFA);
+  static const Color textSecondary = Color(0xFFE0D4EB);
+  static const Color textMuted = Color(0xFF9B8FA8);
 
+  // Gradients for buttons and accents
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primary, primaryLight],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient secondaryGradient = LinearGradient(
+    colors: [secondary, secondaryLight],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+
+  static const LinearGradient logoGradient = LinearGradient(
+    colors: [primaryDark, primary, accent, secondary],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+  );
+}
