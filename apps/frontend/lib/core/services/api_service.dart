@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import '../models/project.dart';
+import '../models/episode.dart';
 
 class ApiService {
   // Check if we're in production (served from port 80/443) or dev
@@ -69,6 +70,46 @@ class ApiService {
     final response = await http.delete(Uri.parse('$baseUrl$apiPrefix/projects/$id'));
     if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Failed to delete project');
+    }
+  }
+
+  // Episode endpoints
+  Future<List<Episode>> getEpisodesByProject(String projectId) async {
+    final response = await http.get(Uri.parse('$baseUrl$apiPrefix/episodes/project/$projectId'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Episode.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load episodes');
+  }
+
+  Future<Episode> createEpisode({
+    required String projectId,
+    required String title,
+    String? description,
+    required int episodeNumber,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl$apiPrefix/episodes/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'project_id': projectId,
+        'title': title,
+        'description': description,
+        'episode_number': episodeNumber,
+        'status': 'draft',
+      }),
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return Episode.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Failed to create episode');
+  }
+
+  Future<void> deleteEpisode(String id) async {
+    final response = await http.delete(Uri.parse('$baseUrl$apiPrefix/episodes/$id'));
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to delete episode');
     }
   }
 }
