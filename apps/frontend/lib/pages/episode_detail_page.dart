@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../core/models/episode.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../core/models/episode.dart';
+import '../core/theme/app_colors.dart';
 import '../widgets/page_top_bar.dart';
 
 class EpisodeDetailPage extends StatefulWidget {

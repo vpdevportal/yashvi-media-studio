@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../../core/models/project.dart';
-import '../../../../core/models/episode.dart';
-import '../../../../core/services/api_service.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../episode/presentation/pages/episode_detail_page.dart';
+import '../core/models/project.dart';
+import '../core/models/episode.dart';
+import '../core/services/api_service.dart';
+import '../core/theme/app_colors.dart';
+import 'episode_detail_page.dart';
 
 class ProjectDetailPage extends StatefulWidget {
   final Project project;

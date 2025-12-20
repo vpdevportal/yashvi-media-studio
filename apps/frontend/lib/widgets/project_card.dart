@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/models/project.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../project/presentation/pages/project_detail_page.dart';
+import '../core/models/project.dart';
+import '../core/theme/app_colors.dart';
+import '../pages/project_detail_page.dart';
 
 class ProjectCard extends StatelessWidget {
   final Project project;

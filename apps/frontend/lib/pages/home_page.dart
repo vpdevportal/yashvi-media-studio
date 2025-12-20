@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/services/api_service.dart';
+import '../core/services/api_service.dart';
 import '../widgets/animated_background.dart';
 import '../widgets/logo_section.dart';
 import '../widgets/status_card.dart';

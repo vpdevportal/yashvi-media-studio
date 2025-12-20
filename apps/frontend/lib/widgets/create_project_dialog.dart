@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../core/models/project.dart';
-import '../../../../core/services/api_service.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../core/models/project.dart';
+import '../core/services/api_service.dart';
+import '../core/theme/app_colors.dart';
 
 class CreateProjectDialog extends StatefulWidget {
   final Function(Project) onProjectCreated;

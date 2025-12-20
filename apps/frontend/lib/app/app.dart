@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_theme.dart';
-import '../features/dashboard/presentation/pages/dashboard_page.dart';
+import '../pages/dashboard_page.dart';
 
 class _FadePageTransitionsBuilder extends PageTransitionsBuilder {
   @override
