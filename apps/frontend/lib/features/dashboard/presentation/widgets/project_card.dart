@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/models/project.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../project/presentation/pages/project_detail_page.dart';
 
 class ProjectCard extends StatelessWidget {
   final Project project;
@@ -40,13 +41,24 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
-      ),
-      child: Padding(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProjectDetailPage(project: project),
+          ),
+        );
+      },
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+          ),
+          child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,6 +133,8 @@ class ProjectCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
         ),
       ),
     );
