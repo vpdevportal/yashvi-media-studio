@@ -203,7 +203,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                             onUpdate: _updateStory,
                             onRetry: _loadStory,
                           ),
-                          const EpisodeScreenplayTab(),
+                          EpisodeScreenplayTab(episode: widget.episode),
                           const EpisodeSnapshotsTab(),
                           const EpisodeShortsTab(),
                         ],
