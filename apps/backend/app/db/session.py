@@ -1,6 +1,14 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
+import os
+
+# Require DATABASE_URL environment variable
+if not settings.DATABASE_URL:
+    raise ValueError(
+        "DATABASE_URL environment variable is required. "
+        "Please set it in your deployment environment (e.g., Coolify environment variables)."
+    )
 
 DATABASE_URL = settings.DATABASE_URL.replace("postgres://", "postgresql+psycopg://")
 
