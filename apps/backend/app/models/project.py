@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy import Column, String, Text, DateTime
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
@@ -16,6 +16,8 @@ class Project(Base):
     status = Column(String(50), default="draft", index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    episodes = relationship("Episode", back_populates="project", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Project {self.name}>"

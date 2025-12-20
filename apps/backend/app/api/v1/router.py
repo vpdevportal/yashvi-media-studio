@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import projects, health
+from app.api.v1.endpoints import projects, health, episodes
 
 api_router = APIRouter()
 
@@ -8,4 +8,5 @@ api_router.include_router(health.router)
 
 # API endpoints
 api_router.include_router(projects.router)
+api_router.include_router(episodes.router, prefix="/episodes", tags=["episodes"])
 
