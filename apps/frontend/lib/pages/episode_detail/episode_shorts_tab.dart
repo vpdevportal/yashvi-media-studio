@@ -7,13 +7,13 @@ class EpisodeShortsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
-        const PageTopBar(title: 'Shorts'),
+        PageTopBar(title: 'Shorts'),
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-            child: const EpisodeEmptyState(
+            padding: EdgeInsets.fromLTRB(32, 0, 32, 32),
+            child: EpisodeEmptyState(
               title: 'Shorts',
               icon: Icons.movie_outlined,
             ),
