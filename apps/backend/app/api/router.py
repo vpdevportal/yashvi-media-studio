@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.endpoints import projects, health, episodes, stories, screenplays
+from app.api.endpoints import projects, health, episodes, stories, screenplays
 
 api_router = APIRouter()
 
