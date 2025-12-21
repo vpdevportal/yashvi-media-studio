@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../core/models/episode.dart';
 import '../core/models/story.dart';
+import '../core/models/scene.dart';
 import '../core/services/api_service.dart';
 import '../core/theme/app_colors.dart';
 import 'episode_detail/episode_screenplay_tab.dart';
@@ -25,6 +26,9 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
   Story? _story;
   bool _isStoryLoading = true;
   String? _storyError;
+  List<Scene> _scenes = [];
+  bool _isScreenplayLoading = true;
+  String? _screenplayError;
 
   final List<_TabItem> _tabs = const [
     _TabItem(icon: Icons.auto_stories_outlined, activeIcon: Icons.auto_stories, label: 'Story'),
@@ -37,6 +41,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
   void initState() {
     super.initState();
     _loadStory();
+    _loadScreenplay();
   }
 
   @override
@@ -65,6 +70,26 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
     }
   }
 
+  Future<void> _loadScreenplay() async {
+    setState(() {
+      _isScreenplayLoading = true;
+      _screenplayError = null;
+    });
+
+    try {
+      final scenes = await _apiService.getScreenplayScenes(widget.episode.id);
+      setState(() {
+        _scenes = scenes;
+        _isScreenplayLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _screenplayError = e.toString().replaceAll('Exception: ', '');
+        _isScreenplayLoading = false;
+      });
+    }
+  }
+
   Future<void> _updateStory(String content) async {
     setState(() {
       _isStoryLoading = true;
@@ -84,6 +109,14 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
       });
       rethrow;
     }
+  }
+
+  Future<void> _handleScreenplayGenerated(List<Scene> scenes) async {
+    setState(() {
+      _scenes = scenes;
+      _isScreenplayLoading = false;
+      _screenplayError = null;
+    });
   }
 
   void _onTabSelected(int index) {
@@ -203,7 +236,14 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                             onUpdate: _updateStory,
                             onRetry: _loadStory,
                           ),
-                          EpisodeScreenplayTab(episode: widget.episode),
+                          EpisodeScreenplayTab(
+                            episode: widget.episode,
+                            scenes: _scenes,
+                            isLoading: _isScreenplayLoading,
+                            error: _screenplayError,
+                            onGenerate: _handleScreenplayGenerated,
+                            onRetry: _loadScreenplay,
+                          ),
                           const EpisodeSnapshotsTab(),
                           const EpisodeShortsTab(),
                         ],
