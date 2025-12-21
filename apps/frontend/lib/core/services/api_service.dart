@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../models/project.dart';
 import '../models/episode.dart';
 import '../models/story.dart';
+import '../models/scene.dart';
 
 class ApiService {
   // Check if we're in production (served from port 80/443) or dev
@@ -138,14 +139,25 @@ class ApiService {
   }
 
   // Screenplay endpoints
-  Future<List<String>> generateScreenplay(String episodeId) async {
+  Future<List<Scene>> getScreenplayScenes(String episodeId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl$apiPrefix/screenplays/episode/$episodeId'),
+    );
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Scene.fromJson(json)).toList();
+    }
+    throw Exception('Failed to load screenplay scenes');
+  }
+
+  Future<List<Scene>> generateScreenplay(String episodeId) async {
     final response = await http.post(
       Uri.parse('$baseUrl$apiPrefix/screenplays/episode/$episodeId/generate'),
       headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((item) => item.toString()).toList();
+      return data.map((json) => Scene.fromJson(json)).toList();
     }
     throw Exception('Failed to generate screenplay');
   }
