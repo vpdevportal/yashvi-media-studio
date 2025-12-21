@@ -170,7 +170,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                   ),
                   child: Text(
                     'Scene ${scene.sceneNumber}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -192,18 +192,18 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
             const SizedBox(height: 12),
             Row(
               children: [
-                Icon(Icons.location_on, size: 16, color: AppColors.textMuted),
+                const Icon(Icons.location_on, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(
                   scene.location,
-                  style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                  style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
                 ),
                 const SizedBox(width: 16),
-                Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
+                const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(
                   scene.timeOfDay,
-                  style: TextStyle(color: AppColors.textMuted, fontSize: 14),
+                  style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
                 ),
               ],
             ),
@@ -222,7 +222,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
               ),
             ],
             const SizedBox(height: 16),
-            Text(
+            const Text(
               'Action',
               style: TextStyle(
                 fontSize: 14,
@@ -237,7 +237,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
             ),
             if (scene.dialogue.isNotEmpty) ...[
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Dialogue',
                 style: TextStyle(
                   fontSize: 14,
@@ -278,10 +278,10 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  const Row(
                     children: [
                       Icon(Icons.visibility, size: 16, color: AppColors.textMuted),
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4),
                       Text(
                         'Visual Notes',
                         style: TextStyle(
@@ -295,7 +295,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                   const SizedBox(height: 8),
                   Text(
                     scene.visualNotes,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 13,
                       height: 1.5,
                       color: AppColors.textMuted,

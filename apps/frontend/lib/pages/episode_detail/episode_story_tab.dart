@@ -182,9 +182,9 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
 
     final content = widget.story?.content;
     if (content == null || content.trim().isEmpty) {
-      return SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-        child: const EpisodeEmptyState(
+      return const SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(32, 0, 32, 32),
+        child: EpisodeEmptyState(
           title: 'Story content',
           icon: Icons.auto_stories_outlined,
         ),
