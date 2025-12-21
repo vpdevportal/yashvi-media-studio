@@ -10,6 +10,12 @@ class Settings(BaseSettings):
     
     DATABASE_URL: str = ""
     
+    # OpenAI Configuration
+    OPENAI_API_KEY: str = ""
+    OPENAI_MODEL: str = "gpt-5-nano"  # Default model for screenplay generation
+    OPENAI_TEMPERATURE: float = 0.7
+    OPENAI_MAX_TOKENS: int = 4000  # Maximum tokens for response
+    
     # CORS
     CORS_ORIGINS: list[str] = ["*"]
     
