@@ -21,6 +21,7 @@ class Episode(Base):
 
     project = relationship("Project", back_populates="episodes")
     story = relationship("Story", back_populates="episode", uselist=False, cascade="all, delete-orphan")
+    screenplays = relationship("Screenplay", back_populates="episode", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Episode {self.episode_number}: {self.title}>"
