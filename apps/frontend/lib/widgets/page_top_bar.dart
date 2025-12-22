@@ -13,9 +13,13 @@ class PageTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+    
     return Container(
-      height: 64,
-      padding: const EdgeInsets.symmetric(horizontal: 32),
+      height: isMobile ? 56 : 64,
+      padding: EdgeInsets.symmetric(
+        horizontal: isMobile ? 16 : 32,
+      ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
@@ -23,16 +27,19 @@ class PageTopBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: isMobile ? 18 : 20,
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           if (actions != null && actions!.isNotEmpty) ...[
-            const Spacer(),
+            SizedBox(width: isMobile ? 8 : 16),
             ...actions!,
           ],
         ],
