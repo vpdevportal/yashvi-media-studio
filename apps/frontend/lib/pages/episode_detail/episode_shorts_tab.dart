@@ -7,16 +7,26 @@ class EpisodeShortsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        PageTopBar(title: 'Shorts'),
+        const PageTopBar(title: 'Shorts'),
         Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(32, 0, 32, 32),
-            child: EpisodeEmptyState(
-              title: 'Shorts',
-              icon: Icons.movie_outlined,
-            ),
+          child: Builder(
+            builder: (context) {
+              final isMobile = MediaQuery.of(context).size.width < 768;
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  isMobile ? 16 : 32,
+                  0,
+                  isMobile ? 16 : 32,
+                  isMobile ? 16 : 32,
+                ),
+                child: const EpisodeEmptyState(
+                  title: 'Shorts',
+                  icon: Icons.movie_outlined,
+                ),
+              );
+            },
           ),
         ),
       ],

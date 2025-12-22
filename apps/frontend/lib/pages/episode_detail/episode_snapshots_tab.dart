@@ -7,16 +7,26 @@ class EpisodeSnapshotsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
-        PageTopBar(title: 'Snapshots'),
+        const PageTopBar(title: 'Snapshots'),
         Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(32, 0, 32, 32),
-            child: EpisodeEmptyState(
-              title: 'Snapshots',
-              icon: Icons.camera_alt_outlined,
-            ),
+          child: Builder(
+            builder: (context) {
+              final isMobile = MediaQuery.of(context).size.width < 768;
+              return SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(
+                  isMobile ? 16 : 32,
+                  0,
+                  isMobile ? 16 : 32,
+                  isMobile ? 16 : 32,
+                ),
+                child: const EpisodeEmptyState(
+                  title: 'Snapshots',
+                  icon: Icons.camera_alt_outlined,
+                ),
+              );
+            },
           ),
         ),
       ],
