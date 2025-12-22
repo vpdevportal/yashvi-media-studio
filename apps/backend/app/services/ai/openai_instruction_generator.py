@@ -38,7 +38,7 @@ REQUIRED STRUCTURE FOR EACH SCENE:
 - characters: Array of character names (Malayalam or English names)
 - action: Detailed description (2-4 sentences, present tense, animation-friendly)
 - dialogue: Array of objects with "character" and "line" keys (dialogue MUST be in Malayalam)
-- visual_notes: Comprehensive description including location, time of day (DAY/NIGHT), setting, mood, lighting, colors, character expressions, key objects, and composition notes optimized for cartoon animation and image generation
+- visual_notes: Simple, concise paragraph describing location, time of day (DAY/NIGHT), setting, mood, lighting, colors, and key visual elements for cartoon animation and image generation
 
 OUTPUT FORMAT (JSON):
 {
@@ -53,7 +53,7 @@ OUTPUT FORMAT (JSON):
         {"character": "രാജു", "line": "അമ്മ, എന്താണ് ഇവിടെ നടക്കുന്നത്?"},
         {"character": "അമ്മ", "line": "എനിക്കും അറിയില്ല, പക്ഷേ നമ്മൾ കണ്ടെത്തണം."}
       ],
-      "visual_notes": "Location: A colorful village house in Kerala. Time: DAY - Bright, sunny day with warm golden sunlight streaming through traditional Kerala windows. The room features vibrant colors - bright blues, greens, and yellows typical of Malayalam cartoon aesthetics. Characters have expressive, exaggerated features suitable for animation. The setting includes traditional Kerala elements like brass lamps, colorful floor mats, and wall paintings. Soft, rounded shapes and friendly atmosphere. Key focus: the mysterious object on the wooden coffee table, drawn in cartoon style with bold outlines and vibrant colors."
+      "visual_notes": "A colorful village house in Kerala during a bright sunny day. Warm golden sunlight streams through traditional Kerala windows into a room decorated with vibrant blues, greens, and yellows. Traditional elements like brass lamps and colorful floor mats create a friendly atmosphere. The mysterious object on the wooden coffee table is the key focus, drawn in cartoon style with bold outlines and vibrant colors."
     }
   ]
 }
@@ -61,7 +61,7 @@ OUTPUT FORMAT (JSON):
 IMPORTANT:
 - All dialogue MUST be in Malayalam (മലയാളം)
 - Scenes must be numbered sequentially
-- Visual notes must be detailed enough for cartoon animation and image generation
+- Visual notes should be a simple, concise paragraph (not a list or bullet points)
 - Use vibrant, colorful descriptions suitable for animation
 - Maintain narrative flow between scenes
 - Include all important story elements
