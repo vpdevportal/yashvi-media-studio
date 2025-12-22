@@ -236,7 +236,7 @@ class _DashboardPageState extends State<DashboardPage> {
       );
     }
 
-    final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+    final isSmallScreen = MediaQuery.of(context).size.width < 1200;
     
     return SingleChildScrollView(
       padding: EdgeInsets.all(isSmallScreen ? 16 : 32),

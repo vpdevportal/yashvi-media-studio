@@ -142,7 +142,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 768;
     final isTablet = screenWidth >= 768 && screenWidth < 1200;
-    final isSmallScreen = screenWidth < 1024; // Small screens show icon-only sidebar
+    final isSmallScreen = screenWidth < 1200; // Small screens show icon-only sidebar
     
     return CallbackShortcuts(
       bindings: {

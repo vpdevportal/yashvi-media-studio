@@ -14,7 +14,7 @@ class Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 1024; // Small screens show icon-only sidebar
+    final isSmallScreen = screenWidth < 1200; // Small screens show icon-only sidebar
     
     return Container(
       width: isSmallScreen ? 64 : 260,
@@ -94,7 +94,7 @@ class Sidebar extends StatelessWidget {
           // Navigation items
           Builder(
             builder: (context) {
-              final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+              final isSmallScreen = MediaQuery.of(context).size.width < 1200;
               return Column(
                 children: [
                   _NavItem(
@@ -139,7 +139,7 @@ class Sidebar extends StatelessWidget {
           // Bottom section
           Builder(
             builder: (context) {
-              final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+              final isSmallScreen = MediaQuery.of(context).size.width < 1200;
               return Column(
                 children: [
                   Divider(color: AppColors.primary.withValues(alpha:0.06), height: 1),

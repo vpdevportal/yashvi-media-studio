@@ -17,7 +17,7 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+    final isSmallScreen = MediaQuery.of(context).size.width < 1200;
     final isMobile = MediaQuery.of(context).size.width < 768;
     
     return Container(
