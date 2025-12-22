@@ -31,8 +31,8 @@ fi
 
 echo ""
 echo "🎉 Starting all services via Turborepo..."
-echo "   Backend:  http://localhost:8000"
-echo "   Frontend: flutter run"
+echo "   Backend:  http://localhost:6005"
+echo "   Frontend: http://localhost:5005 (web)"
 echo ""
 
 # Run dev via Turborepo

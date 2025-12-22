@@ -46,9 +46,9 @@ echo "✅ Flutter app started (PID: $FLUTTER_PID)"
 echo "   Frontend logs available in browser console (F12)"
 echo ""
 
-# Check and kill any process using port 8000
-echo "🔍 Checking for processes on port 8000..."
-PORT=8000
+# Check and kill any process using port 6005
+echo "🔍 Checking for processes on port 6005..."
+PORT=6005
 PID=$(lsof -ti:$PORT 2>/dev/null) || PID=""
 if [ -n "$PID" ]; then
     echo "⚠️  Found process $PID using port $PORT, killing it..."
@@ -62,12 +62,13 @@ fi
 # Start backend in foreground (logs visible in terminal)
 echo "🔧 Starting backend server in foreground..."
 echo "📋 Backend logs will appear below:"
+echo "   Backend:  http://localhost:6005"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 cd "$ROOT_DIR/apps/backend"
 source venv/bin/activate
 
 # Run backend in foreground with unbuffered output
 # This will block and show all backend logs
-python -u -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -u -m uvicorn app.main:app --reload --host 0.0.0.0 --port 6005
 
 

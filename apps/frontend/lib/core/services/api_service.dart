@@ -18,12 +18,12 @@ class ApiService {
     if (kIsWeb) {
       // In dev, Flutter runs on a different port, need to hit backend directly
       if (!_isProduction) {
-        return 'http://localhost:8000';
+        return 'http://localhost:6005';
       }
       // In production, use relative URLs
       return '';
     }
-    return 'http://localhost:8000';
+    return 'http://localhost:6005';
   }
 
   // API prefix: in prod nginx proxies /api/* to backend /*

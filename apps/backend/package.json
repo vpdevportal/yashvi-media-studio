@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "source venv/bin/activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000",
+    "dev": "source venv/bin/activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 6005",
     "build": "echo 'No build step for Python'",
     "lint": "echo 'Add ruff or flake8 for linting'",
     "test": "pytest"

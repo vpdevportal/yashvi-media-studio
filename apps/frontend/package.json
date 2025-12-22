@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "/Users/vaisakhprakash/Developer/Instalations/flutter/bin/flutter run -d chrome",
+    "dev": "/Users/vaisakhprakash/Developer/Instalations/flutter/bin/flutter run -d chrome --web-port 5005",
     "build": "flutter build",
     "lint": "flutter analyze",
     "test": "flutter test"
