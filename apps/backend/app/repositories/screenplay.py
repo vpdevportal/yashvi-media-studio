@@ -67,4 +67,13 @@ class ScreenplayRepository:
         self.db.delete(screenplay)
         self.db.commit()
         return True
+    
+    def delete_all_by_episode_id(self, episode_id: UUID) -> int:
+        """Delete all screenplays for an episode. Returns the number of deleted screenplays."""
+        screenplays = self.get_all_by_episode_id(episode_id)
+        count = len(screenplays)
+        for screenplay in screenplays:
+            self.db.delete(screenplay)
+        self.db.commit()
+        return count
 

@@ -55,6 +55,36 @@ async def get_screenplay_scenes(
         )
 
 
+@router.delete("/episode/{episode_id}")
+async def clear_screenplays(
+    episode_id: UUID,
+    db: Session = Depends(get_db)
+):
+    """
+    Delete all screenplays for an episode.
+    Returns the number of deleted screenplays.
+    """
+    logger.info(f"Clearing all screenplays for episode {episode_id}")
+    
+    try:
+        from app.repositories.screenplay import ScreenplayRepository
+        
+        screenplay_repo = ScreenplayRepository(db)
+        deleted_count = screenplay_repo.delete_all_by_episode_id(episode_id)
+        
+        logger.info(f"Deleted {deleted_count} screenplay(s) for episode {episode_id}")
+        return {"deleted_count": deleted_count}
+    except Exception as e:
+        logger.error(
+            f"Error clearing screenplays for episode {episode_id}: {str(e)}",
+            exc_info=True
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to clear screenplays: {str(e)}"
+        )
+
+
 @router.post("/episode/{episode_id}/generate", response_model=List[SceneResponse])
 async def generate_screenplay(
     episode_id: UUID,
