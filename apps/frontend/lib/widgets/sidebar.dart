@@ -13,8 +13,11 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isSmallScreen = screenWidth < 1024; // Small screens show icon-only sidebar
+    
     return Container(
-      width: 260,
+      width: isSmallScreen ? 64 : 260,
       decoration: BoxDecoration(
         color: AppColors.sidebar,
         border: Border(
@@ -29,7 +32,9 @@ class Sidebar extends StatelessWidget {
           // Logo area
           Container(
             height: 72,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmallScreen ? 8 : 20,
+            ),
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
@@ -37,87 +42,118 @@ class Sidebar extends StatelessWidget {
                 ),
               ),
             ),
-            child: Row(
-              children: [
-                Image.asset(
-                  'assets/logo.png',
-                  width: 48,
-                  height: 48,
-                ),
-                const SizedBox(width: 14),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ShaderMask(
-                      shaderCallback: (bounds) => AppColors.logoGradient.createShader(bounds),
-                      child: const Text(
-                        'Yashvi Media',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
+            child: isSmallScreen
+                ? Center(
+                    child: Image.asset(
+                      'assets/logo.png',
+                      width: 40,
+                      height: 40,
                     ),
-                    const Text(
-                      'Studio',
-                      style: TextStyle(
-                        color: AppColors.textMuted,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1.5,
+                  )
+                : Row(
+                    children: [
+                      Image.asset(
+                        'assets/logo.png',
+                        width: 48,
+                        height: 48,
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                      const SizedBox(width: 14),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) => AppColors.logoGradient.createShader(bounds),
+                            child: const Text(
+                              'Yashvi Media',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            'Studio',
+                            style: TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
           ),
 
           const SizedBox(height: 16),
 
           // Navigation items
-          _NavItem(
-            icon: Icons.dashboard_outlined,
-            activeIcon: Icons.dashboard,
-            label: 'Dashboard',
-            isSelected: selectedIndex == 0,
-            onTap: () => onItemSelected(0),
-          ),
-          _NavItem(
-            icon: Icons.folder_outlined,
-            activeIcon: Icons.folder,
-            label: 'Projects',
-            isSelected: selectedIndex == 1,
-            onTap: () => onItemSelected(1),
-          ),
-          _NavItem(
-            icon: Icons.people_outline,
-            activeIcon: Icons.people,
-            label: 'Characters',
-            isSelected: selectedIndex == 2,
-            onTap: () => onItemSelected(2),
-          ),
-          _NavItem(
-            icon: Icons.video_library_outlined,
-            activeIcon: Icons.video_library,
-            label: 'Episodes',
-            isSelected: selectedIndex == 3,
-            onTap: () => onItemSelected(3),
+          Builder(
+            builder: (context) {
+              final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+              return Column(
+                children: [
+                  _NavItem(
+                    icon: Icons.dashboard_outlined,
+                    activeIcon: Icons.dashboard,
+                    label: 'Dashboard',
+                    isSelected: selectedIndex == 0,
+                    onTap: () => onItemSelected(0),
+                    showLabel: !isSmallScreen,
+                  ),
+                  _NavItem(
+                    icon: Icons.folder_outlined,
+                    activeIcon: Icons.folder,
+                    label: 'Projects',
+                    isSelected: selectedIndex == 1,
+                    onTap: () => onItemSelected(1),
+                    showLabel: !isSmallScreen,
+                  ),
+                  _NavItem(
+                    icon: Icons.people_outline,
+                    activeIcon: Icons.people,
+                    label: 'Characters',
+                    isSelected: selectedIndex == 2,
+                    onTap: () => onItemSelected(2),
+                    showLabel: !isSmallScreen,
+                  ),
+                  _NavItem(
+                    icon: Icons.video_library_outlined,
+                    activeIcon: Icons.video_library,
+                    label: 'Episodes',
+                    isSelected: selectedIndex == 3,
+                    onTap: () => onItemSelected(3),
+                    showLabel: !isSmallScreen,
+                  ),
+                ],
+              );
+            },
           ),
 
           const Spacer(),
 
           // Bottom section
-          Divider(color: AppColors.primary.withValues(alpha:0.06), height: 1),
-          _NavItem(
-            icon: Icons.settings_outlined,
-            activeIcon: Icons.settings,
-            label: 'Settings',
-            isSelected: selectedIndex == 4,
-            onTap: () => onItemSelected(4),
+          Builder(
+            builder: (context) {
+              final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+              return Column(
+                children: [
+                  Divider(color: AppColors.primary.withValues(alpha:0.06), height: 1),
+                  _NavItem(
+                    icon: Icons.settings_outlined,
+                    activeIcon: Icons.settings,
+                    label: 'Settings',
+                    isSelected: selectedIndex == 4,
+                    onTap: () => onItemSelected(4),
+                    showLabel: !isSmallScreen,
+                  ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 16),
         ],
@@ -132,6 +168,7 @@ class _NavItem extends StatefulWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool showLabel;
 
   const _NavItem({
     required this.icon,
@@ -139,6 +176,7 @@ class _NavItem extends StatefulWidget {
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.showLabel = true,
   });
 
   @override
@@ -155,43 +193,60 @@ class _NavItemState extends State<_NavItem> {
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: widget.isSelected
-                ? AppColors.primary.withValues(alpha:0.12)
-                : _isHovered
-                    ? AppColors.surfaceElevated.withValues(alpha:0.5)
-                    : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: widget.isSelected
-                ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
-                : null,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                widget.isSelected ? widget.activeIcon : widget.icon,
-                color: widget.isSelected
-                    ? AppColors.primary
-                    : AppColors.textMuted,
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  color: widget.isSelected
-                      ? AppColors.textPrimary
-                      : AppColors.textMuted,
-                  fontSize: 14,
-                  fontWeight:
-                      widget.isSelected ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ],
+        child: Tooltip(
+          message: widget.showLabel ? '' : widget.label,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            margin: EdgeInsets.symmetric(
+              horizontal: widget.showLabel ? 12 : 8,
+              vertical: 2,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.showLabel ? 12 : 8,
+              vertical: widget.showLabel ? 10 : 12,
+            ),
+            decoration: BoxDecoration(
+              color: widget.isSelected
+                  ? AppColors.primary.withValues(alpha:0.12)
+                  : _isHovered
+                      ? AppColors.surfaceElevated.withValues(alpha:0.5)
+                      : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+              border: widget.isSelected
+                  ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
+                  : null,
+            ),
+            child: widget.showLabel
+                ? Row(
+                    children: [
+                      Icon(
+                        widget.isSelected ? widget.activeIcon : widget.icon,
+                        color: widget.isSelected
+                            ? AppColors.primary
+                            : AppColors.textMuted,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        widget.label,
+                        style: TextStyle(
+                          color: widget.isSelected
+                              ? AppColors.textPrimary
+                              : AppColors.textMuted,
+                          fontSize: 14,
+                          fontWeight:
+                              widget.isSelected ? FontWeight.w600 : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  )
+                : Icon(
+                    widget.isSelected ? widget.activeIcon : widget.icon,
+                    color: widget.isSelected
+                        ? AppColors.primary
+                        : AppColors.textMuted,
+                    size: 22,
+                  ),
           ),
         ),
       ),
