@@ -236,27 +236,31 @@ class _DashboardPageState extends State<DashboardPage> {
       );
     }
 
-    final isSmallScreen = MediaQuery.of(context).size.width < 1200;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    final isSmallScreen = screenWidth < 1200;
     
     return SingleChildScrollView(
-      padding: EdgeInsets.all(isSmallScreen ? 16 : 32),
+      padding: EdgeInsets.all(isMobile ? 12 : (isSmallScreen ? 16 : 32)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Stat cards - horizontal scroll on small screens
           isSmallScreen
               ? SizedBox(
-                  height: 120,
+                  height: isMobile ? 100 : 120,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
+                    padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 0),
                     children: [
                       _StatCard(
                         icon: Icons.folder,
                         label: 'Total Projects',
                         value: _projects.length.toString(),
                         color: AppColors.primary,
+                        isMobile: isMobile,
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: isMobile ? 12 : 16),
                       _StatCard(
                         icon: Icons.play_circle_outline,
                         label: 'In Progress',
@@ -265,8 +269,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             .length
                             .toString(),
                         color: AppColors.secondary,
+                        isMobile: isMobile,
                       ),
-                      const SizedBox(width: 16),
+                      SizedBox(width: isMobile ? 12 : 16),
                       _StatCard(
                         icon: Icons.check_circle_outline,
                         label: 'Completed',
@@ -275,6 +280,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             .length
                             .toString(),
                         color: AppColors.success,
+                        isMobile: isMobile,
                       ),
                     ],
                   ),
@@ -286,6 +292,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       label: 'Total Projects',
                       value: _projects.length.toString(),
                       color: AppColors.primary,
+                      isMobile: false,
                     ),
                     const SizedBox(width: 16),
                     _StatCard(
@@ -296,6 +303,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           .length
                           .toString(),
                       color: AppColors.secondary,
+                      isMobile: false,
                     ),
                     const SizedBox(width: 16),
                     _StatCard(
@@ -306,58 +314,94 @@ class _DashboardPageState extends State<DashboardPage> {
                           .length
                           .toString(),
                       color: AppColors.success,
+                      isMobile: false,
                     ),
                   ],
                 ),
-          const SizedBox(height: 32),
-          Row(
-            children: [
-              const Text(
-                'Recent Projects',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
+          SizedBox(height: isMobile ? 20 : 32),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Recent Projects',
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: isMobile ? 14 : 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
-              ),
-              const Spacer(),
-              Text(
-                '${_projects.length} projects',
-                style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          // Grid view with fixed height to prevent overflow
-          SizedBox(
-            height: MediaQuery.of(context).size.height - (isSmallScreen ? 400 : 500),
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: isSmallScreen ? 300 : 380,
-                childAspectRatio: 1.6,
-                crossAxisSpacing: isSmallScreen ? 12 : 20,
-                mainAxisSpacing: isSmallScreen ? 12 : 20,
-              ),
-              itemCount: _projects.length,
-              itemBuilder: (context, index) {
-                return ProjectCard(
-                  project: _projects[index],
-                  onDelete: () async {
-                    try {
-                      await _apiService.deleteProject(_projects[index].id);
-                      setState(() {
-                        _projects.removeAt(index);
-                      });
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Failed to delete project')),
-                      );
-                    }
-                  },
-                );
-              },
+                Text(
+                  '${_projects.length} projects',
+                  style: TextStyle(
+                    color: AppColors.textMuted,
+                    fontSize: isMobile ? 12 : 13,
+                  ),
+                ),
+              ],
             ),
           ),
+          SizedBox(height: isMobile ? 12 : 16),
+          // Grid view - use shrinkWrap on mobile to prevent overflow
+          isMobile
+              ? GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    childAspectRatio: 2.2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemCount: _projects.length,
+                  itemBuilder: (context, index) {
+                    return ProjectCard(
+                      project: _projects[index],
+                      onDelete: () async {
+                        try {
+                          await _apiService.deleteProject(_projects[index].id);
+                          setState(() {
+                            _projects.removeAt(index);
+                          });
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Failed to delete project')),
+                          );
+                        }
+                      },
+                    );
+                  },
+                )
+              : GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: isSmallScreen ? 300 : 380,
+                    childAspectRatio: 1.6,
+                    crossAxisSpacing: isSmallScreen ? 12 : 20,
+                    mainAxisSpacing: isSmallScreen ? 12 : 20,
+                  ),
+                  itemCount: _projects.length,
+                  itemBuilder: (context, index) {
+                    return ProjectCard(
+                      project: _projects[index],
+                      onDelete: () async {
+                        try {
+                          await _apiService.deleteProject(_projects[index].id);
+                          setState(() {
+                            _projects.removeAt(index);
+                          });
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Failed to delete project')),
+                          );
+                        }
+                      },
+                    );
+                  },
+                ),
         ],
       ),
     );
@@ -369,49 +413,58 @@ class _StatCard extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+  final bool isMobile;
 
   const _StatCard({
     required this.icon,
     required this.label,
     required this.value,
     required this.color,
+    this.isMobile = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isMobile ? 12 : 20),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: isMobile ? 36 : 44,
+            height: isMobile ? 36 : 44,
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: color, size: 22),
+            child: Icon(icon, color: color, size: isMobile ? 18 : 22),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: isMobile ? 12 : 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textPrimary,
-                  fontSize: 24,
+                  fontSize: isMobile ? 20 : 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 label,
-                style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                style: TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: isMobile ? 11 : 13,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

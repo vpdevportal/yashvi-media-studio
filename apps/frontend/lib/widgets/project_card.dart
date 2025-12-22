@@ -41,6 +41,8 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+    
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -59,82 +61,88 @@ class ProjectCard extends StatelessWidget {
             border: Border.all(color: AppColors.primary.withValues(alpha:0.2)),
           ),
           child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: EdgeInsets.all(isMobile ? 16 : 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Text(
-                    project.name,
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                PopupMenuButton<String>(
-                  icon: const Icon(Icons.more_vert, color: AppColors.textMuted),
-                  color: AppColors.surface,
-                  onSelected: (value) {
-                    if (value == 'delete') {
-                      onDelete();
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: 'delete',
-                      child: Row(
-                        children: [
-                          Icon(Icons.delete, color: AppColors.error, size: 20),
-                          SizedBox(width: 8),
-                          Text('Delete', style: TextStyle(color: AppColors.error)),
-                        ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        project.name,
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: isMobile ? 16 : 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
+                    ),
+                    SizedBox(width: isMobile ? 8 : 12),
+                    PopupMenuButton<String>(
+                      icon: Icon(
+                        Icons.more_vert,
+                        color: AppColors.textMuted,
+                        size: isMobile ? 20 : 24,
+                      ),
+                      color: AppColors.surface,
+                      onSelected: (value) {
+                        if (value == 'delete') {
+                          onDelete();
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, color: AppColors.error, size: 20),
+                              SizedBox(width: 8),
+                              Text('Delete', style: TextStyle(color: AppColors.error)),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                SizedBox(height: isMobile ? 8 : 12),
+                if (project.description != null && project.description!.isNotEmpty)
+                  Text(
+                    project.description!,
+                    style: TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: isMobile ? 13 : 14,
+                    ),
+                    maxLines: isMobile ? 3 : 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                SizedBox(height: isMobile ? 8 : 12),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isMobile ? 10 : 12,
+                    vertical: isMobile ? 5 : 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor().withValues(alpha:0.15),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    _getStatusLabel(),
+                    style: TextStyle(
+                      color: _getStatusColor(),
+                      fontSize: isMobile ? 11 : 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ],
             ),
-            const SizedBox(height: 8),
-            if (project.description != null && project.description!.isNotEmpty)
-              Expanded(
-                child: Text(
-                  project.description!,
-                  style: const TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 14,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )
-            else
-              const Spacer(),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: _getStatusColor().withValues(alpha:0.15),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                _getStatusLabel(),
-                style: TextStyle(
-                  color: _getStatusColor(),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
         ),
       ),
     );
