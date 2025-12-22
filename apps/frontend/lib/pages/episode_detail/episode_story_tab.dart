@@ -181,9 +181,16 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
     }
 
     final content = widget.story?.content;
+    final isMobile = MediaQuery.of(context).size.width < 768;
+    
     if (content == null || content.trim().isEmpty) {
-      return const SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(32, 0, 32, 32),
+      return SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(
+          isMobile ? 16 : 32,
+          0,
+          isMobile ? 16 : 32,
+          isMobile ? 16 : 32,
+        ),
         child: EpisodeEmptyState(
           title: 'Story content',
           icon: Icons.auto_stories_outlined,
@@ -192,10 +199,15 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+      padding: EdgeInsets.fromLTRB(
+        isMobile ? 16 : 32,
+        0,
+        isMobile ? 16 : 32,
+        isMobile ? 16 : 32,
+      ),
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(isMobile ? 16 : 32),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
@@ -203,9 +215,9 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
         ),
         child: Text(
           content,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.textSecondary,
-            fontSize: 15,
+            fontSize: isMobile ? 14 : 15,
             height: 1.8,
           ),
         ),
@@ -214,8 +226,15 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
   }
 
   Widget _buildEditor() {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+    
     return Container(
-      padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+      padding: EdgeInsets.fromLTRB(
+        isMobile ? 16 : 32,
+        0,
+        isMobile ? 16 : 32,
+        isMobile ? 16 : 32,
+      ),
       child: TextField(
         controller: _storyController,
         autofocus: true,
