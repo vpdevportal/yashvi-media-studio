@@ -139,6 +139,9 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = MediaQuery.of(context).size.width < 768;
+    final isTablet = MediaQuery.of(context).size.width >= 768 && MediaQuery.of(context).size.width < 1200;
+    
     return CallbackShortcuts(
       bindings: {
         const SingleActivator(LogicalKeyboardKey.escape): () => Navigator.pop(context),
@@ -151,9 +154,11 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
             children: [
               // Full-width navbar
               Container(
-                height: 64,
+                height: isMobile ? 56 : 64,
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+                padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 16 : isTablet ? 24 : 32,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.navbar,
                   border: Border(
@@ -167,32 +172,35 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                       onPressed: () => Navigator.pop(context),
                       tooltip: 'Back (Esc)',
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: isMobile ? 8 : 16),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 8 : 10,
+                        vertical: isMobile ? 3 : 4,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha:0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         'EP ${widget.episode.episodeNumber}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primary,
-                          fontSize: 12,
+                          fontSize: isMobile ? 11 : 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: isMobile ? 8 : 16),
                     Expanded(
                       child: Text(
                         widget.episode.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.textPrimary,
-                          fontSize: 18,
+                          fontSize: isMobile ? 16 : 18,
                           fontWeight: FontWeight.bold,
                         ),
-                        maxLines: 1,
+                        maxLines: isMobile ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -201,62 +209,115 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
               ),
               // Main content area with left menu and right content
               Expanded(
-                child: Row(
-                  children: [
-                    // Left sidebar menu
-                    Container(
-                      width: 240,
-                      decoration: BoxDecoration(
-                        color: AppColors.sidebar,
-                        border: Border(
-                          right: BorderSide(color: AppColors.primary.withValues(alpha:0.08)),
-                        ),
-                      ),
-                      child: ListView(
-                        padding: const EdgeInsets.only(top: 16),
-                        children: List.generate(_tabs.length, (index) {
-                          final tab = _tabs[index];
-                          return _SidebarTab(
-                            icon: tab.icon,
-                            activeIcon: tab.activeIcon,
-                            label: tab.label,
-                            isSelected: _selectedTab == index,
-                            onTap: () => _onTabSelected(index),
-                          );
-                        }),
-                      ),
-                    ),
-                    // Right content area - horizontal scrollable pages
-                    Expanded(
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: _onPageChanged,
-                        scrollDirection: Axis.horizontal,
+                child: isMobile
+                    ? Column(
                         children: [
-                          EpisodeStoryTab(
-                            episode: widget.episode,
-                            story: _story,
-                            isLoading: _isStoryLoading,
-                            error: _storyError,
-                            onUpdate: _updateStory,
-                            onRetry: _loadStory,
+                          // Mobile: Horizontal tab bar at top
+                          Container(
+                            height: 56,
+                            color: AppColors.sidebar,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              children: List.generate(_tabs.length, (index) {
+                                final tab = _tabs[index];
+                                return _MobileTab(
+                                  icon: tab.icon,
+                                  activeIcon: tab.activeIcon,
+                                  label: tab.label,
+                                  isSelected: _selectedTab == index,
+                                  onTap: () => _onTabSelected(index),
+                                );
+                              }),
+                            ),
                           ),
-                          EpisodeScreenplayTab(
-                            episode: widget.episode,
-                            scenes: _scenes,
-                            isLoading: _isScreenplayLoading,
-                            error: _screenplayError,
-                            onGenerate: _handleScreenplayGenerated,
-                            onRetry: _loadScreenplay,
-                            onClear: _handleScreenplayCleared,
+                          // Mobile: Content area
+                          Expanded(
+                            child: PageView(
+                              controller: _pageController,
+                              onPageChanged: _onPageChanged,
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                EpisodeStoryTab(
+                                  episode: widget.episode,
+                                  story: _story,
+                                  isLoading: _isStoryLoading,
+                                  error: _storyError,
+                                  onUpdate: _updateStory,
+                                  onRetry: _loadStory,
+                                ),
+                                EpisodeScreenplayTab(
+                                  episode: widget.episode,
+                                  scenes: _scenes,
+                                  isLoading: _isScreenplayLoading,
+                                  error: _screenplayError,
+                                  onGenerate: _handleScreenplayGenerated,
+                                  onRetry: _loadScreenplay,
+                                  onClear: _handleScreenplayCleared,
+                                ),
+                                const EpisodeSnapshotsTab(),
+                                const EpisodeShortsTab(),
+                              ],
+                            ),
                           ),
-                          const EpisodeSnapshotsTab(),
-                          const EpisodeShortsTab(),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          // Desktop: Left sidebar menu
+                          Container(
+                            width: isTablet ? 200 : 240,
+                            decoration: BoxDecoration(
+                              color: AppColors.sidebar,
+                              border: Border(
+                                right: BorderSide(color: AppColors.primary.withValues(alpha:0.08)),
+                              ),
+                            ),
+                            child: ListView(
+                              padding: const EdgeInsets.only(top: 16),
+                              children: List.generate(_tabs.length, (index) {
+                                final tab = _tabs[index];
+                                return _SidebarTab(
+                                  icon: tab.icon,
+                                  activeIcon: tab.activeIcon,
+                                  label: tab.label,
+                                  isSelected: _selectedTab == index,
+                                  onTap: () => _onTabSelected(index),
+                                );
+                              }),
+                            ),
+                          ),
+                          // Desktop: Right content area - horizontal scrollable pages
+                          Expanded(
+                            child: PageView(
+                              controller: _pageController,
+                              onPageChanged: _onPageChanged,
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                EpisodeStoryTab(
+                                  episode: widget.episode,
+                                  story: _story,
+                                  isLoading: _isStoryLoading,
+                                  error: _storyError,
+                                  onUpdate: _updateStory,
+                                  onRetry: _loadStory,
+                                ),
+                                EpisodeScreenplayTab(
+                                  episode: widget.episode,
+                                  scenes: _scenes,
+                                  isLoading: _isScreenplayLoading,
+                                  error: _screenplayError,
+                                  onGenerate: _handleScreenplayGenerated,
+                                  onRetry: _loadScreenplay,
+                                  onClear: _handleScreenplayCleared,
+                                ),
+                                const EpisodeSnapshotsTab(),
+                                const EpisodeShortsTab(),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
