@@ -4,6 +4,7 @@ import '../core/models/project.dart';
 import '../core/models/episode.dart';
 import '../core/services/api_service.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 import 'episode_detail_page.dart';
 
 class ProjectDetailPage extends StatefulWidget {
@@ -145,12 +146,14 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           body: Row(
             children: [
               // Left sidebar
-              Container(
-                width: 240,
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: MediaQuery.of(context).size.width < 1200 ? 64 : 260,
                 decoration: BoxDecoration(
                   color: AppColors.sidebar,
                   border: Border(
-                    right: BorderSide(color: AppColors.primary.withValues(alpha:0.08)),
+                    right: BorderSide(
+                        color: AppColors.primary.withValues(alpha: 0.08)),
                   ),
                 ),
                 child: Column(
@@ -158,33 +161,48 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                     // Back button and project name
                     Container(
                       height: 72,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal:
+                            MediaQuery.of(context).size.width < 1200 ? 0 : 16,
+                      ),
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
+                          bottom: BorderSide(
+                            color: AppColors.primary.withValues(alpha: 0.06),
+                          ),
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.arrow_back, color: AppColors.textSecondary, size: 20),
-                            onPressed: () => Navigator.pop(context),
-                            tooltip: 'Back to Projects (Esc)',
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              widget.project.name,
-                              style: const TextStyle(
-                                color: AppColors.textPrimary,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                      child: MediaQuery.of(context).size.width < 1200
+                          ? Center(
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back,
+                                    color: AppColors.textSecondary, size: 20),
+                                onPressed: () => Navigator.pop(context),
+                                tooltip: 'Back to Projects (Esc)',
                               ),
-                              overflow: TextOverflow.ellipsis,
+                            )
+                          : Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.arrow_back,
+                                      color: AppColors.textSecondary, size: 20),
+                                  onPressed: () => Navigator.pop(context),
+                                  tooltip: 'Back to Projects (Esc)',
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    widget.project.name,
+                                    style: const TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                     const SizedBox(height: 16),
                     // Navigation tabs
@@ -194,6 +212,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                       label: 'Overview',
                       isSelected: _selectedTab == 0,
                       onTap: () => setState(() => _selectedTab = 0),
+                      showLabel: MediaQuery.of(context).size.width >= 1200,
                     ),
                     _SidebarTab(
                       icon: Icons.video_library_outlined,
@@ -202,6 +221,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                       isSelected: _selectedTab == 1,
                       onTap: () => setState(() => _selectedTab = 1),
                       badge: _episodes.length,
+                      showLabel: MediaQuery.of(context).size.width >= 1200,
                     ),
                     _SidebarTab(
                       icon: Icons.people_outline,
@@ -209,6 +229,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                       label: 'Characters',
                       isSelected: _selectedTab == 2,
                       onTap: () => setState(() => _selectedTab = 2),
+                      showLabel: MediaQuery.of(context).size.width >= 1200,
                     ),
                     _SidebarTab(
                       icon: Icons.settings_outlined,
@@ -216,6 +237,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
                       label: 'Settings',
                       isSelected: _selectedTab == 3,
                       onTap: () => setState(() => _selectedTab = 3),
+                      showLabel: MediaQuery.of(context).size.width >= 1200,
                     ),
                   ],
                 ),
@@ -300,35 +322,67 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
 
   Widget _buildOverview() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
+      padding: context.responsivePadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Stats row
-          Row(
-            children: [
-              _StatCard(
-                icon: Icons.video_library,
-                label: 'Episodes',
-                value: _episodes.length.toString(),
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 16),
-              const _StatCard(
-                icon: Icons.people,
-                label: 'Characters',
-                value: '0',
-                color: AppColors.secondary,
-              ),
-              const SizedBox(width: 16),
-              _StatCard(
-                icon: Icons.calendar_today,
-                label: 'Created',
-                value: _formatDate(widget.project.createdAt),
-                color: AppColors.accent,
-              ),
-            ],
-          ),
+          MediaQuery.of(context).size.width < 1200
+              ? SizedBox(
+                  height: 100,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _StatCard(
+                        icon: Icons.video_library,
+                        label: 'Episodes',
+                        value: _episodes.length.toString(),
+                        color: AppColors.primary,
+                        isCompact: true,
+                      ),
+                      const SizedBox(width: 12),
+                      const _StatCard(
+                        icon: Icons.people,
+                        label: 'Characters',
+                        value: '0',
+                        color: AppColors.secondary,
+                        isCompact: true,
+                      ),
+                      const SizedBox(width: 12),
+                      _StatCard(
+                        icon: Icons.calendar_today,
+                        label: 'Created',
+                        value: _formatDate(widget.project.createdAt),
+                        color: AppColors.accent,
+                        isCompact: true,
+                      ),
+                    ],
+                  ),
+                )
+              : Row(
+                  children: [
+                    _StatCard(
+                      icon: Icons.video_library,
+                      label: 'Episodes',
+                      value: _episodes.length.toString(),
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 16),
+                    const _StatCard(
+                      icon: Icons.people,
+                      label: 'Characters',
+                      value: '0',
+                      color: AppColors.secondary,
+                    ),
+                    const SizedBox(width: 16),
+                    _StatCard(
+                      icon: Icons.calendar_today,
+                      label: 'Created',
+                      value: _formatDate(widget.project.createdAt),
+                      color: AppColors.accent,
+                    ),
+                  ],
+                ),
           const SizedBox(height: 32),
           // Description
           const Text(
@@ -403,7 +457,7 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(32),
+      padding: context.responsivePadding,
       itemCount: _episodes.length,
       itemBuilder: (context, index) {
         final episode = _episodes[index];
@@ -478,6 +532,7 @@ class _SidebarTab extends StatefulWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final int? badge;
+  final bool showLabel;
 
   const _SidebarTab({
     required this.icon,
@@ -486,6 +541,7 @@ class _SidebarTab extends StatefulWidget {
     required this.isSelected,
     required this.onTap,
     this.badge,
+    this.showLabel = true,
   });
 
   @override
@@ -502,56 +558,82 @@ class _SidebarTabState extends State<_SidebarTab> {
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: widget.isSelected
-                ? AppColors.primary.withValues(alpha:0.12)
-                : _isHovered
-                    ? AppColors.surfaceElevated.withValues(alpha:0.5)
-                    : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: widget.isSelected
-                ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
-                : null,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                widget.isSelected ? widget.activeIcon : widget.icon,
-                color: widget.isSelected ? AppColors.primary : AppColors.textMuted,
-                size: 20,
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(
-                  widget.label,
-                  style: TextStyle(
-                    color: widget.isSelected ? AppColors.textPrimary : AppColors.textMuted,
-                    fontSize: 14,
-                    fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.normal,
-                  ),
-                ),
-              ),
-              if (widget.badge != null && widget.badge! > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha:0.2),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    '${widget.badge}',
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+        child: Tooltip(
+          message: widget.showLabel ? '' : widget.label,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            margin: EdgeInsets.symmetric(
+              horizontal: widget.showLabel ? 12 : 8,
+              vertical: 2,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.showLabel ? 12 : 8,
+              vertical: widget.showLabel ? 10 : 12,
+            ),
+            decoration: BoxDecoration(
+              color: widget.isSelected
+                  ? AppColors.primary.withValues(alpha: 0.12)
+                  : _isHovered
+                      ? AppColors.surfaceElevated.withValues(alpha: 0.5)
+                      : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+              border: widget.isSelected
+                  ? Border.all(color: AppColors.primary.withValues(alpha: 0.25))
+                  : null,
+            ),
+            child: widget.showLabel
+                ? Row(
+                    children: [
+                      Icon(
+                        widget.isSelected ? widget.activeIcon : widget.icon,
+                        color: widget.isSelected
+                            ? AppColors.primary
+                            : AppColors.textMuted,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          widget.label,
+                          style: TextStyle(
+                            color: widget.isSelected
+                                ? AppColors.textPrimary
+                                : AppColors.textMuted,
+                            fontSize: 14,
+                            fontWeight: widget.isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                      if (widget.badge != null && widget.badge! > 0)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '${widget.badge}',
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                    ],
+                  )
+                : Center(
+                    child: Icon(
+                      widget.isSelected ? widget.activeIcon : widget.icon,
+                      color: widget.isSelected
+                          ? AppColors.primary
+                          : AppColors.textMuted,
+                      size: 22,
                     ),
                   ),
-                ),
-            ],
           ),
         ),
       ),
@@ -564,33 +646,36 @@ class _StatCard extends StatelessWidget {
   final String label;
   final String value;
   final Color color;
+  final bool isCompact;
 
   const _StatCard({
     required this.icon,
     required this.label,
     required this.value,
     required this.color,
+    this.isCompact = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: EdgeInsets.all(isCompact ? 16 : 20),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha:0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: isCompact ? 36 : 44,
+            height: isCompact ? 36 : 44,
             decoration: BoxDecoration(
               color: color.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: color, size: 22),
+            child: Icon(icon, color: color, size: isCompact ? 18 : 22),
           ),
           const SizedBox(width: 16),
           Column(
@@ -598,15 +683,15 @@ class _StatCard extends StatelessWidget {
             children: [
               Text(
                 value,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.textPrimary,
-                  fontSize: 24,
+                  fontSize: isCompact ? 20 : 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Text(
                 label,
-                style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                style: TextStyle(color: AppColors.textMuted, fontSize: isCompact ? 12 : 13),
               ),
             ],
           ),
