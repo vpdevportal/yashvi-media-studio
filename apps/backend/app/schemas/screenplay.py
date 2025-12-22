@@ -8,12 +8,11 @@ class SceneBase(BaseModel):
     """Base scene schema with all scene fields."""
     scene_number: int
     title: str
-    location: str
-    time_of_day: str  # DAY/NIGHT
+    duration_seconds: int  # Estimated scene duration in seconds
     characters: List[str]
     action: str  # Scene description
     dialogue: List[Dict[str, str]]  # Array of {character, line} objects
-    visual_notes: str  # For image generation
+    visual_notes: str  # For image generation (includes location and time of day)
 
 
 class SceneCreate(SceneBase):
@@ -34,8 +33,9 @@ class SceneResponse(SceneBase):
 
 class ScreenplayBase(BaseModel):
     """Base screenplay schema."""
-    status: str = "pending"  # pending, generating, completed, failed
-    generation_metadata: Optional[Dict] = None
+    ai_model: Optional[str] = None
+    generation_time_seconds: Optional[int] = None
+    scene_count: Optional[int] = None
 
 
 class ScreenplayCreate(ScreenplayBase):
