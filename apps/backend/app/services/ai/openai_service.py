@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import List
 from openai import AsyncOpenAI
 from openai import APIError
@@ -9,6 +10,7 @@ from app.services.ai.openai_instruction_generator import OpenAIInstructionGenera
 from app.schemas.screenplay import SceneBase
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 
 class OpenAIService(BaseAIService):
@@ -55,15 +57,26 @@ class OpenAIService(BaseAIService):
                 input=user_input
             )
             
+            logger.info("OpenAI API response received. Response type: %s", type(response).__name__)
+            logger.debug("OpenAI response object attributes: %s", dir(response))
+            
             content = response.output_text
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.info("OpenAI screenplay generation raw output: %s", content)
+            logger.info("OpenAI response output_text (length: %d chars): %s", len(content) if content else 0, content)
+            
             if not content:
                 raise ValueError("Empty response from OpenAI")
             
             # Parse JSON response
-            response_data = json.loads(content)
+            try:
+                response_data = json.loads(content)
+            except json.JSONDecodeError as e:
+                logger.error(
+                    "Failed to parse JSON response. Error at position %d (line %d, column %d). "
+                    "Content preview (first 500 chars): %s",
+                    e.pos, e.lineno, e.colno, content[:500] if content else "None"
+                )
+                logger.error("Full content for debugging: %s", content)
+                raise Exception(f"Failed to parse AI response as JSON: {str(e)}")
             
             # Extract scenes from response
             scenes_data = response_data.get("scenes", [])
@@ -76,9 +89,9 @@ class OpenAIService(BaseAIService):
             return scenes
             
         except APIError as e:
+            logger.error("OpenAI API error: %s", str(e))
             raise Exception(f"OpenAI API error: {str(e)}")
-        except json.JSONDecodeError as e:
-            raise Exception(f"Failed to parse AI response as JSON: {str(e)}")
         except Exception as e:
-            raise Exception(f"Failed to generate screenplay: {str(e)}")
+            logger.error("Failed to generate screenplay: %s", str(e), exc_info=True)
+            raise
 
