@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 
 class PageTopBar extends StatelessWidget {
   final String title;
@@ -13,13 +14,9 @@ class PageTopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
-    
     return Container(
-      height: isMobile ? 56 : 64,
-      padding: EdgeInsets.symmetric(
-        horizontal: isMobile ? 16 : 32,
-      ),
+      height: context.isMobile ? 56 : 64,
+      padding: context.responsiveHorizontalPadding,
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: AppColors.primary.withValues(alpha:0.06)),
@@ -32,14 +29,14 @@ class PageTopBar extends StatelessWidget {
               title,
               style: TextStyle(
                 color: AppColors.textPrimary,
-                fontSize: isMobile ? 18 : 20,
+                fontSize: context.isMobile ? 18 : 20,
                 fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
           if (actions != null && actions!.isNotEmpty) ...[
-            SizedBox(width: isMobile ? 8 : 16),
+            SizedBox(width: context.isMobile ? 8 : 16),
             ...actions!,
           ],
         ],

@@ -3,6 +3,7 @@ import '../../core/models/episode.dart';
 import '../../core/models/scene.dart';
 import '../../core/services/api_service.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/extensions/media_query_extensions.dart';
 import '../../widgets/page_top_bar.dart';
 import 'episode_empty_state.dart';
 
@@ -129,13 +130,12 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
     
     return Column(
       children: [
         PageTopBar(
           title: 'Screenplay',
-          actions: isMobile
+          actions: context.isMobile
               ? [
                   // Mobile: Stack buttons vertically or use icon buttons
                   Row(
@@ -258,43 +258,28 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                     )
                   : (widget.scenes == null || widget.scenes!.isEmpty)
                       ? SingleChildScrollView(
-                          padding: EdgeInsets.fromLTRB(
-                            isMobile ? 16 : 32,
-                            0,
-                            isMobile ? 16 : 32,
-                            isMobile ? 16 : 32,
-                          ),
+                          padding: context.responsivePadding,
                           child: EpisodeEmptyState(
                             title: 'No screenplay generated yet',
                             icon: Icons.description_outlined,
                           ),
                         )
                       : SingleChildScrollView(
-                          padding: EdgeInsets.fromLTRB(
-                            isMobile ? 16 : 32,
-                            0,
-                            isMobile ? 16 : 32,
-                            isMobile ? 16 : 32,
-                          ),
-                          child: Builder(
-                            builder: (context) {
-                              final isMobile = MediaQuery.of(context).size.width < 768;
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: isMobile ? 16 : 24),
-                                  Text(
-                                    'Scenes (${widget.scenes!.length})',
-                                    style: TextStyle(
-                                      fontSize: isMobile ? 18 : 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: isMobile ? 12 : 16),
-                                  ...widget.scenes!.map((scene) => _buildSceneCard(scene)),
-                                ],
-                              );
-                            },
+                          padding: context.responsivePadding,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: context.isMobile ? 16 : 24),
+                              Text(
+                                'Scenes (${widget.scenes!.length})',
+                                style: TextStyle(
+                                  fontSize: context.isMobile ? 18 : 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: context.isMobile ? 12 : 16),
+                              ...widget.scenes!.map((scene) => _buildSceneCard(scene)),
+                            ],
                           ),
                         ),
         ),
@@ -305,12 +290,10 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
   Widget _buildSceneCard(Scene scene) {
     return Builder(
       builder: (context) {
-        final isMobile = MediaQuery.of(context).size.width < 768;
-        
         return Card(
-          margin: EdgeInsets.only(bottom: isMobile ? 12 : 16),
+          margin: EdgeInsets.only(bottom: context.isMobile ? 12 : 16),
           child: Padding(
-            padding: EdgeInsets.all(isMobile ? 16 : 20),
+            padding: EdgeInsets.all(context.isMobile ? 16 : 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -318,8 +301,8 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 10 : 12,
-                        vertical: isMobile ? 5 : 6,
+                        horizontal: context.isMobile ? 10 : 12,
+                        vertical: context.isMobile ? 5 : 6,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.1),
@@ -330,84 +313,84 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                         style: TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
-                          fontSize: isMobile ? 12 : 14,
+                          fontSize: context.isMobile ? 12 : 14,
                         ),
                       ),
                     ),
-                    SizedBox(width: isMobile ? 8 : 12),
+                    SizedBox(width: context.isMobile ? 8 : 12),
                     Expanded(
                       child: Text(
                         scene.title,
                         style: TextStyle(
-                          fontSize: isMobile ? 16 : 18,
+                          fontSize: context.isMobile ? 16 : 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: isMobile ? 10 : 12),
+                SizedBox(height: context.isMobile ? 10 : 12),
                 Row(
                   children: [
                     Icon(
                       Icons.timer_outlined,
-                      size: isMobile ? 14 : 16,
+                      size: context.isMobile ? 14 : 16,
                       color: AppColors.textMuted,
                     ),
-                    SizedBox(width: isMobile ? 4 : 4),
+                    SizedBox(width: context.isMobile ? 4 : 4),
                     Text(
                       '${scene.durationSeconds}s',
                       style: TextStyle(
                         color: AppColors.textMuted,
-                        fontSize: isMobile ? 12 : 14,
+                        fontSize: context.isMobile ? 12 : 14,
                       ),
                     ),
                   ],
                 ),
                 if (scene.characters.isNotEmpty) ...[
-                  SizedBox(height: isMobile ? 10 : 12),
+                  SizedBox(height: context.isMobile ? 10 : 12),
                   Wrap(
-                    spacing: isMobile ? 6 : 8,
+                    spacing: context.isMobile ? 6 : 8,
                     children: scene.characters.map((character) {
                       return Chip(
                         label: Text(character),
-                        labelStyle: TextStyle(fontSize: isMobile ? 11 : 12),
+                        labelStyle: TextStyle(fontSize: context.isMobile ? 11 : 12),
                         padding: EdgeInsets.zero,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       );
                     }).toList(),
                   ),
                 ],
-                SizedBox(height: isMobile ? 12 : 16),
+                SizedBox(height: context.isMobile ? 12 : 16),
                 Text(
                   'Action',
                   style: TextStyle(
-                    fontSize: isMobile ? 13 : 14,
+                    fontSize: context.isMobile ? 13 : 14,
                     fontWeight: FontWeight.bold,
                     color: AppColors.textMuted,
                   ),
                 ),
-                SizedBox(height: isMobile ? 4 : 4),
+                SizedBox(height: context.isMobile ? 4 : 4),
                 Text(
                   scene.action,
                   style: TextStyle(
-                    fontSize: isMobile ? 13 : 14,
+                    fontSize: context.isMobile ? 13 : 14,
                     height: 1.5,
                   ),
                 ),
                 if (scene.dialogue.isNotEmpty) ...[
-                  SizedBox(height: isMobile ? 12 : 16),
+                  SizedBox(height: context.isMobile ? 12 : 16),
                   Text(
                     'Dialogue',
                     style: TextStyle(
-                      fontSize: isMobile ? 13 : 14,
+                      fontSize: context.isMobile ? 13 : 14,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textMuted,
                     ),
                   ),
-                  SizedBox(height: isMobile ? 6 : 8),
+                  SizedBox(height: context.isMobile ? 6 : 8),
                   ...scene.dialogue.map((dialogue) => Padding(
-                        padding: EdgeInsets.only(bottom: isMobile ? 6 : 8),
+                        padding: EdgeInsets.only(bottom: context.isMobile ? 6 : 8),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -415,14 +398,14 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                               '${dialogue.character}: ',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: isMobile ? 13 : 14,
+                                fontSize: context.isMobile ? 13 : 14,
                               ),
                             ),
                             Expanded(
                               child: Text(
                                 dialogue.line,
                                 style: TextStyle(
-                                  fontSize: isMobile ? 13 : 14,
+                                  fontSize: context.isMobile ? 13 : 14,
                                   height: 1.5,
                                 ),
                               ),
@@ -431,9 +414,9 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                         ),
                       )),
                 ],
-                SizedBox(height: isMobile ? 12 : 16),
+                SizedBox(height: context.isMobile ? 12 : 16),
                 Container(
-                  padding: EdgeInsets.all(isMobile ? 10 : 12),
+                  padding: EdgeInsets.all(context.isMobile ? 10 : 12),
                   decoration: BoxDecoration(
                     color: AppColors.textMuted.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(8),
@@ -445,25 +428,25 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                         children: [
                           Icon(
                             Icons.visibility,
-                            size: isMobile ? 14 : 16,
+                            size: context.isMobile ? 14 : 16,
                             color: AppColors.textMuted,
                           ),
-                          SizedBox(width: isMobile ? 4 : 4),
+                          SizedBox(width: context.isMobile ? 4 : 4),
                           Text(
                             'Visual Notes',
                             style: TextStyle(
-                              fontSize: isMobile ? 11 : 12,
+                              fontSize: context.isMobile ? 11 : 12,
                               fontWeight: FontWeight.bold,
                               color: AppColors.textMuted,
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(height: isMobile ? 6 : 8),
+                      SizedBox(height: context.isMobile ? 6 : 8),
                       Text(
                         scene.visualNotes,
                         style: TextStyle(
-                          fontSize: isMobile ? 12 : 13,
+                          fontSize: context.isMobile ? 12 : 13,
                           height: 1.5,
                           color: AppColors.textMuted,
                         ),

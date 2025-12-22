@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../core/models/project.dart';
 import '../core/services/api_service.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 import '../widgets/sidebar.dart';
 import '../widgets/top_bar.dart';
 import '../widgets/project_card.dart';
@@ -236,31 +237,28 @@ class _DashboardPageState extends State<DashboardPage> {
       );
     }
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
-    final isSmallScreen = screenWidth < 1200;
     
     return SingleChildScrollView(
-      padding: EdgeInsets.all(isMobile ? 12 : (isSmallScreen ? 16 : 32)),
+      padding: context.responsivePadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Stat cards - horizontal scroll on small screens
-          isSmallScreen
+          context.isSmallScreen
               ? SizedBox(
-                  height: isMobile ? 100 : 120,
+                  height: context.isMobile ? 100 : 120,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 0),
+                    padding: EdgeInsets.symmetric(horizontal: context.isMobile ? 4 : 0),
                     children: [
                       _StatCard(
                         icon: Icons.folder,
                         label: 'Total Projects',
                         value: _projects.length.toString(),
                         color: AppColors.primary,
-                        isMobile: isMobile,
+                        isMobile: context.isMobile,
                       ),
-                      SizedBox(width: isMobile ? 12 : 16),
+                      SizedBox(width: context.isMobile ? 12 : 16),
                       _StatCard(
                         icon: Icons.play_circle_outline,
                         label: 'In Progress',
@@ -269,9 +267,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             .length
                             .toString(),
                         color: AppColors.secondary,
-                        isMobile: isMobile,
+                        isMobile: context.isMobile,
                       ),
-                      SizedBox(width: isMobile ? 12 : 16),
+                      SizedBox(width: context.isMobile ? 12 : 16),
                       _StatCard(
                         icon: Icons.check_circle_outline,
                         label: 'Completed',
@@ -280,7 +278,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             .length
                             .toString(),
                         color: AppColors.success,
-                        isMobile: isMobile,
+                        isMobile: context.isMobile,
                       ),
                     ],
                   ),
@@ -318,9 +316,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ],
                 ),
-          SizedBox(height: isMobile ? 20 : 32),
+          SizedBox(height: context.isMobile ? 20 : 32),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: isMobile ? 4 : 0),
+            padding: EdgeInsets.symmetric(horizontal: context.isMobile ? 4 : 0),
             child: Row(
               children: [
                 Expanded(
@@ -328,7 +326,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     'Recent Projects',
                     style: TextStyle(
                       color: AppColors.textPrimary,
-                      fontSize: isMobile ? 14 : 16,
+                      fontSize: context.isMobile ? 14 : 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -337,15 +335,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   '${_projects.length} projects',
                   style: TextStyle(
                     color: AppColors.textMuted,
-                    fontSize: isMobile ? 12 : 13,
+                    fontSize: context.isMobile ? 12 : 13,
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(height: isMobile ? 12 : 16),
+          SizedBox(height: context.isMobile ? 12 : 16),
           // Grid view - use shrinkWrap on mobile to prevent overflow
-          isMobile
+          context.isMobile
               ? GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -378,10 +376,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: isSmallScreen ? 300 : 380,
+                    maxCrossAxisExtent: context.isSmallScreen ? 300 : 380,
                     childAspectRatio: 1.6,
-                    crossAxisSpacing: isSmallScreen ? 12 : 20,
-                    mainAxisSpacing: isSmallScreen ? 12 : 20,
+                    crossAxisSpacing: context.isSmallScreen ? 12 : 20,
+                    mainAxisSpacing: context.isSmallScreen ? 12 : 20,
                   ),
                   itemCount: _projects.length,
                   itemBuilder: (context, index) {

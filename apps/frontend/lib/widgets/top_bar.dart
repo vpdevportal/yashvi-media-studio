@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 
 class TopBar extends StatelessWidget {
   final String title;
@@ -17,13 +18,11 @@ class TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSmallScreen = MediaQuery.of(context).size.width < 1200;
-    final isMobile = MediaQuery.of(context).size.width < 768;
     
     return Container(
-      height: isMobile ? 64 : 72,
+      height: context.isMobile ? 64 : 72,
       padding: EdgeInsets.symmetric(
-        horizontal: isSmallScreen ? 16 : 32,
+        horizontal: context.isSmallScreen ? 16 : 32,
       ),
       decoration: BoxDecoration(
         color: AppColors.navbar,
@@ -38,16 +37,16 @@ class TopBar extends StatelessWidget {
               title,
               style: TextStyle(
                 color: AppColors.textPrimary,
-                fontSize: isMobile ? 18 : 20,
+                fontSize: context.isMobile ? 18 : 20,
                 fontWeight: FontWeight.bold,
               ),
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          if (!isMobile) ...[
+          if (!context.isMobile) ...[
             const SizedBox(width: 16),
             // Search bar - hide on very small screens
-            if (!isSmallScreen)
+            if (!context.isSmallScreen)
               Container(
                 width: 280,
                 height: 40,
@@ -95,7 +94,7 @@ class TopBar extends StatelessWidget {
                   ],
                 ),
               ),
-            if (isSmallScreen && !isMobile) const SizedBox(width: 8),
+            if (context.isSmallScreen && !context.isMobile) const SizedBox(width: 8),
             if (onRefresh != null)
               _ActionButton(
                 icon: Icons.refresh,
@@ -103,10 +102,10 @@ class TopBar extends StatelessWidget {
                 onTap: onRefresh!,
               ),
             if (onAdd != null) ...[
-              SizedBox(width: isSmallScreen ? 8 : 12),
+              SizedBox(width: context.isSmallScreen ? 8 : 12),
               _PrimaryButton(
                 icon: Icons.add,
-                label: isSmallScreen ? '' : (addLabel ?? 'Add New'),
+                label: context.isSmallScreen ? '' : (addLabel ?? 'Add New'),
                 onTap: onAdd!,
               ),
             ],

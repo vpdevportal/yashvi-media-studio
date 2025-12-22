@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/models/episode.dart';
 import '../../core/models/story.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/extensions/media_query_extensions.dart';
 import '../../widgets/page_top_bar.dart';
 import 'episode_empty_state.dart';
 
@@ -181,16 +182,10 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
     }
 
     final content = widget.story?.content;
-    final isMobile = MediaQuery.of(context).size.width < 768;
     
     if (content == null || content.trim().isEmpty) {
       return SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(
-          isMobile ? 16 : 32,
-          0,
-          isMobile ? 16 : 32,
-          isMobile ? 16 : 32,
-        ),
+        padding: context.responsivePadding,
         child: EpisodeEmptyState(
           title: 'Story content',
           icon: Icons.auto_stories_outlined,
@@ -199,15 +194,10 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
     }
 
     return SingleChildScrollView(
-      padding: EdgeInsets.fromLTRB(
-        isMobile ? 16 : 32,
-        0,
-        isMobile ? 16 : 32,
-        isMobile ? 16 : 32,
-      ),
+      padding: context.responsivePadding,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(isMobile ? 16 : 32),
+        padding: EdgeInsets.all(context.isMobile ? 16 : 32),
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(12),
@@ -217,7 +207,7 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
           content,
           style: TextStyle(
             color: AppColors.textSecondary,
-            fontSize: isMobile ? 14 : 15,
+            fontSize: context.isMobile ? 14 : 15,
             height: 1.8,
           ),
         ),
@@ -226,15 +216,8 @@ class _EpisodeStoryTabState extends State<EpisodeStoryTab> {
   }
 
   Widget _buildEditor() {
-    final isMobile = MediaQuery.of(context).size.width < 768;
-    
     return Container(
-      padding: EdgeInsets.fromLTRB(
-        isMobile ? 16 : 32,
-        0,
-        isMobile ? 16 : 32,
-        isMobile ? 16 : 32,
-      ),
+      padding: context.responsivePadding,
       child: TextField(
         controller: _storyController,
         autofocus: true,

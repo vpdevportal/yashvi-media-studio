@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 
 class Sidebar extends StatelessWidget {
   final int selectedIndex;
@@ -13,11 +14,9 @@ class Sidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 1200; // Small screens show icon-only sidebar
     
     return Container(
-      width: isSmallScreen ? 64 : 260,
+      width: context.isSmallScreen ? 64 : 260,
       decoration: BoxDecoration(
         color: AppColors.sidebar,
         border: Border(
@@ -33,7 +32,7 @@ class Sidebar extends StatelessWidget {
           Container(
             height: 72,
             padding: EdgeInsets.symmetric(
-              horizontal: isSmallScreen ? 8 : 20,
+              horizontal: context.isSmallScreen ? 8 : 20,
             ),
             decoration: BoxDecoration(
               border: Border(
@@ -42,7 +41,7 @@ class Sidebar extends StatelessWidget {
                 ),
               ),
             ),
-            child: isSmallScreen
+            child: context.isSmallScreen
                 ? Center(
                     child: Image.asset(
                       'assets/logo.png',
@@ -94,7 +93,6 @@ class Sidebar extends StatelessWidget {
           // Navigation items
           Builder(
             builder: (context) {
-              final isSmallScreen = MediaQuery.of(context).size.width < 1200;
               return Column(
                 children: [
                   _NavItem(
@@ -103,7 +101,7 @@ class Sidebar extends StatelessWidget {
                     label: 'Dashboard',
                     isSelected: selectedIndex == 0,
                     onTap: () => onItemSelected(0),
-                    showLabel: !isSmallScreen,
+                    showLabel: !context.isSmallScreen,
                   ),
                   _NavItem(
                     icon: Icons.folder_outlined,
@@ -111,7 +109,7 @@ class Sidebar extends StatelessWidget {
                     label: 'Projects',
                     isSelected: selectedIndex == 1,
                     onTap: () => onItemSelected(1),
-                    showLabel: !isSmallScreen,
+                    showLabel: !context.isSmallScreen,
                   ),
                   _NavItem(
                     icon: Icons.people_outline,
@@ -119,7 +117,7 @@ class Sidebar extends StatelessWidget {
                     label: 'Characters',
                     isSelected: selectedIndex == 2,
                     onTap: () => onItemSelected(2),
-                    showLabel: !isSmallScreen,
+                    showLabel: !context.isSmallScreen,
                   ),
                   _NavItem(
                     icon: Icons.video_library_outlined,
@@ -127,7 +125,7 @@ class Sidebar extends StatelessWidget {
                     label: 'Episodes',
                     isSelected: selectedIndex == 3,
                     onTap: () => onItemSelected(3),
-                    showLabel: !isSmallScreen,
+                    showLabel: !context.isSmallScreen,
                   ),
                 ],
               );
@@ -139,7 +137,6 @@ class Sidebar extends StatelessWidget {
           // Bottom section
           Builder(
             builder: (context) {
-              final isSmallScreen = MediaQuery.of(context).size.width < 1200;
               return Column(
                 children: [
                   Divider(color: AppColors.primary.withValues(alpha:0.06), height: 1),
@@ -149,7 +146,7 @@ class Sidebar extends StatelessWidget {
                     label: 'Settings',
                     isSelected: selectedIndex == 4,
                     onTap: () => onItemSelected(4),
-                    showLabel: !isSmallScreen,
+                    showLabel: !context.isSmallScreen,
                   ),
                 ],
               );

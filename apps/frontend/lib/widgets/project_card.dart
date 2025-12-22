@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/models/project.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 import '../pages/project_detail_page.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -41,7 +42,6 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
     
     return GestureDetector(
       onTap: () {
@@ -61,7 +61,7 @@ class ProjectCard extends StatelessWidget {
             border: Border.all(color: AppColors.primary.withValues(alpha:0.2)),
           ),
           child: Padding(
-            padding: EdgeInsets.all(isMobile ? 16 : 20),
+            padding: EdgeInsets.all(context.isMobile ? 16 : 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -75,19 +75,19 @@ class ProjectCard extends StatelessWidget {
                         project.name,
                         style: TextStyle(
                           color: AppColors.textPrimary,
-                          fontSize: isMobile ? 16 : 18,
+                          fontSize: context.isMobile ? 16 : 18,
                           fontWeight: FontWeight.bold,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SizedBox(width: isMobile ? 8 : 12),
+                    SizedBox(width: context.isMobile ? 8 : 12),
                     PopupMenuButton<String>(
                       icon: Icon(
                         Icons.more_vert,
                         color: AppColors.textMuted,
-                        size: isMobile ? 20 : 24,
+                        size: context.isMobile ? 20 : 24,
                       ),
                       color: AppColors.surface,
                       onSelected: (value) {
@@ -110,22 +110,22 @@ class ProjectCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: isMobile ? 8 : 12),
+                SizedBox(height: context.isMobile ? 8 : 12),
                 if (project.description != null && project.description!.isNotEmpty)
                   Text(
                     project.description!,
                     style: TextStyle(
                       color: AppColors.textMuted,
-                      fontSize: isMobile ? 13 : 14,
+                      fontSize: context.isMobile ? 13 : 14,
                     ),
-                    maxLines: isMobile ? 3 : 2,
+                    maxLines: context.isMobile ? 3 : 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                SizedBox(height: isMobile ? 8 : 12),
+                SizedBox(height: context.isMobile ? 8 : 12),
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: isMobile ? 10 : 12,
-                    vertical: isMobile ? 5 : 6,
+                    horizontal: context.isMobile ? 10 : 12,
+                    vertical: context.isMobile ? 5 : 6,
                   ),
                   decoration: BoxDecoration(
                     color: _getStatusColor().withValues(alpha:0.15),
@@ -135,7 +135,7 @@ class ProjectCard extends StatelessWidget {
                     _getStatusLabel(),
                     style: TextStyle(
                       color: _getStatusColor(),
-                      fontSize: isMobile ? 11 : 12,
+                      fontSize: context.isMobile ? 11 : 12,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

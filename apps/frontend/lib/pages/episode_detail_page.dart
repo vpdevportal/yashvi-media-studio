@@ -5,6 +5,7 @@ import '../core/models/story.dart';
 import '../core/models/scene.dart';
 import '../core/services/api_service.dart';
 import '../core/theme/app_colors.dart';
+import '../core/extensions/media_query_extensions.dart';
 import 'episode_detail/episode_screenplay_tab.dart';
 import 'episode_detail/episode_shorts_tab.dart';
 import 'episode_detail/episode_snapshots_tab.dart';
@@ -139,10 +140,6 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
-    final isTablet = screenWidth >= 768 && screenWidth < 1200;
-    final isSmallScreen = screenWidth < 1200; // Small screens show icon-only sidebar
     
     return CallbackShortcuts(
       bindings: {
@@ -156,10 +153,10 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
             children: [
               // Full-width navbar
               Container(
-                height: isMobile ? 56 : 64,
+                height: context.isMobile ? 56 : 64,
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                  horizontal: isMobile ? 16 : isTablet ? 24 : 32,
+                  horizontal: context.isMobile ? 16 : context.isTablet ? 24 : 32,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.navbar,
@@ -174,11 +171,11 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                       onPressed: () => Navigator.pop(context),
                       tooltip: 'Back (Esc)',
                     ),
-                    SizedBox(width: isMobile ? 8 : 16),
+                    SizedBox(width: context.isMobile ? 8 : 16),
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 8 : 10,
-                        vertical: isMobile ? 3 : 4,
+                        horizontal: context.isMobile ? 8 : 10,
+                        vertical: context.isMobile ? 3 : 4,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha:0.15),
@@ -188,21 +185,21 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                         'EP ${widget.episode.episodeNumber}',
                         style: TextStyle(
                           color: AppColors.primary,
-                          fontSize: isMobile ? 11 : 12,
+                          fontSize: context.isMobile ? 11 : 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    SizedBox(width: isMobile ? 8 : 16),
+                    SizedBox(width: context.isMobile ? 8 : 16),
                     Expanded(
                       child: Text(
                         widget.episode.title,
                         style: TextStyle(
                           color: AppColors.textPrimary,
-                          fontSize: isMobile ? 16 : 18,
+                          fontSize: context.isMobile ? 16 : 18,
                           fontWeight: FontWeight.bold,
                         ),
-                        maxLines: isMobile ? 2 : 1,
+                        maxLines: context.isMobile ? 2 : 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -211,7 +208,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
               ),
               // Main content area with left menu and right content
               Expanded(
-                child: isMobile
+                child: context.isMobile
                     ? Column(
                         children: [
                           // Mobile: Horizontal tab bar at top
@@ -268,7 +265,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                         children: [
                           // Desktop: Left sidebar menu (icon-only on small screens)
                           Container(
-                            width: isSmallScreen ? 64 : (isTablet ? 200 : 240),
+                            width: context.isSmallScreen ? 64 : (context.isTablet ? 200 : 240),
                             decoration: BoxDecoration(
                               color: AppColors.sidebar,
                               border: Border(
@@ -285,7 +282,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                                   label: tab.label,
                                   isSelected: _selectedTab == index,
                                   onTap: () => _onTabSelected(index),
-                                  showLabel: !isSmallScreen,
+                                  showLabel: !context.isSmallScreen,
                                 );
                               }),
                             ),
