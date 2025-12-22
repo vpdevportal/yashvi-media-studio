@@ -119,6 +119,11 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
     });
   }
 
+  Future<void> _handleScreenplayCleared() async {
+    // Reload screenplay to reflect the cleared state
+    await _loadScreenplay();
+  }
+
   void _onTabSelected(int index) {
     setState(() => _selectedTab = index);
     _pageController.animateToPage(
@@ -243,6 +248,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                             error: _screenplayError,
                             onGenerate: _handleScreenplayGenerated,
                             onRetry: _loadScreenplay,
+                            onClear: _handleScreenplayCleared,
                           ),
                           const EpisodeSnapshotsTab(),
                           const EpisodeShortsTab(),

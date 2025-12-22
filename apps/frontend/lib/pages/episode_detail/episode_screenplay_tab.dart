@@ -13,6 +13,7 @@ class EpisodeScreenplayTab extends StatefulWidget {
   final String? error;
   final Function(List<Scene>)? onGenerate;
   final VoidCallback? onRetry;
+  final VoidCallback? onClear;
 
   const EpisodeScreenplayTab({
     super.key,
@@ -22,6 +23,7 @@ class EpisodeScreenplayTab extends StatefulWidget {
     this.error,
     this.onGenerate,
     this.onRetry,
+    this.onClear,
   });
 
   @override
@@ -31,6 +33,71 @@ class EpisodeScreenplayTab extends StatefulWidget {
 class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
   final ApiService _apiService = ApiService();
   bool _isGenerating = false;
+  bool _isClearing = false;
+
+  Future<void> _handleClear() async {
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Clear Screenplay'),
+        content: const Text('Are you sure you want to clear all screenplays for this episode? This action cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Clear'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    setState(() {
+      _isClearing = true;
+    });
+
+    try {
+      await _apiService.clearScreenplays(widget.episode.id);
+      setState(() {
+        _isClearing = false;
+      });
+      // Clear scenes by calling onClear callback or onGenerate with empty list
+      if (widget.onClear != null) {
+        widget.onClear!();
+      } else if (widget.onGenerate != null) {
+        widget.onGenerate!([]);
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Screenplay cleared successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _isClearing = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(e.toString().replaceAll('Exception: ', '')),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   Future<void> _handleGenerate() async {
     setState(() {
@@ -67,8 +134,28 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
         PageTopBar(
           title: 'Screenplay',
           actions: [
+            OutlinedButton.icon(
+              onPressed: (_isClearing || _isGenerating || widget.scenes == null || widget.scenes!.isEmpty) 
+                  ? null 
+                  : _handleClear,
+              icon: _isClearing
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : const Icon(Icons.delete_outline, size: 18),
+              label: Text(_isClearing ? 'Clearing...' : 'Clear'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.red,
+                side: const BorderSide(color: Colors.red),
+              ),
+            ),
+            const SizedBox(width: 8),
             ElevatedButton.icon(
-              onPressed: _isGenerating ? null : _handleGenerate,
+              onPressed: (_isGenerating || _isClearing) ? null : _handleGenerate,
               icon: _isGenerating
                   ? const SizedBox(
                       width: 16,
@@ -170,7 +257,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                   ),
                   child: Text(
                     'Scene ${scene.sceneNumber}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -192,18 +279,11 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
             const SizedBox(height: 12),
             Row(
               children: [
-                const Icon(Icons.location_on, size: 16, color: AppColors.textMuted),
+                Icon(Icons.timer_outlined, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 4),
                 Text(
-                  scene.location,
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
-                ),
-                const SizedBox(width: 16),
-                const Icon(Icons.access_time, size: 16, color: AppColors.textMuted),
-                const SizedBox(width: 4),
-                Text(
-                  scene.timeOfDay,
-                  style: const TextStyle(color: AppColors.textMuted, fontSize: 14),
+                  '${scene.durationSeconds}s',
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 14),
                 ),
               ],
             ),
@@ -222,7 +302,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
               ),
             ],
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Action',
               style: TextStyle(
                 fontSize: 14,
@@ -237,7 +317,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
             ),
             if (scene.dialogue.isNotEmpty) ...[
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Dialogue',
                 style: TextStyle(
                   fontSize: 14,
@@ -278,10 +358,10 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
                       Icon(Icons.visibility, size: 16, color: AppColors.textMuted),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
                         'Visual Notes',
                         style: TextStyle(
@@ -295,7 +375,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                   const SizedBox(height: 8),
                   Text(
                     scene.visualNotes,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
                       height: 1.5,
                       color: AppColors.textMuted,
