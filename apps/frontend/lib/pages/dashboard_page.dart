@@ -236,41 +236,79 @@ class _DashboardPageState extends State<DashboardPage> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(32),
+    final isSmallScreen = MediaQuery.of(context).size.width < 1024;
+    
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(isSmallScreen ? 16 : 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              _StatCard(
-                icon: Icons.folder,
-                label: 'Total Projects',
-                value: _projects.length.toString(),
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 16),
-              _StatCard(
-                icon: Icons.play_circle_outline,
-                label: 'In Progress',
-                value: _projects
-                    .where((p) => p.status == 'in_progress')
-                    .length
-                    .toString(),
-                color: AppColors.secondary,
-              ),
-              const SizedBox(width: 16),
-              _StatCard(
-                icon: Icons.check_circle_outline,
-                label: 'Completed',
-                value: _projects
-                    .where((p) => p.status == 'completed')
-                    .length
-                    .toString(),
-                color: AppColors.success,
-              ),
-            ],
-          ),
+          // Stat cards - horizontal scroll on small screens
+          isSmallScreen
+              ? SizedBox(
+                  height: 120,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _StatCard(
+                        icon: Icons.folder,
+                        label: 'Total Projects',
+                        value: _projects.length.toString(),
+                        color: AppColors.primary,
+                      ),
+                      const SizedBox(width: 16),
+                      _StatCard(
+                        icon: Icons.play_circle_outline,
+                        label: 'In Progress',
+                        value: _projects
+                            .where((p) => p.status == 'in_progress')
+                            .length
+                            .toString(),
+                        color: AppColors.secondary,
+                      ),
+                      const SizedBox(width: 16),
+                      _StatCard(
+                        icon: Icons.check_circle_outline,
+                        label: 'Completed',
+                        value: _projects
+                            .where((p) => p.status == 'completed')
+                            .length
+                            .toString(),
+                        color: AppColors.success,
+                      ),
+                    ],
+                  ),
+                )
+              : Row(
+                  children: [
+                    _StatCard(
+                      icon: Icons.folder,
+                      label: 'Total Projects',
+                      value: _projects.length.toString(),
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 16),
+                    _StatCard(
+                      icon: Icons.play_circle_outline,
+                      label: 'In Progress',
+                      value: _projects
+                          .where((p) => p.status == 'in_progress')
+                          .length
+                          .toString(),
+                      color: AppColors.secondary,
+                    ),
+                    const SizedBox(width: 16),
+                    _StatCard(
+                      icon: Icons.check_circle_outline,
+                      label: 'Completed',
+                      value: _projects
+                          .where((p) => p.status == 'completed')
+                          .length
+                          .toString(),
+                      color: AppColors.success,
+                    ),
+                  ],
+                ),
           const SizedBox(height: 32),
           Row(
             children: [
@@ -290,13 +328,15 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const SizedBox(height: 16),
-          Expanded(
+          // Grid view with fixed height to prevent overflow
+          SizedBox(
+            height: MediaQuery.of(context).size.height - (isSmallScreen ? 400 : 500),
             child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 380,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: isSmallScreen ? 300 : 380,
                 childAspectRatio: 1.6,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20,
+                crossAxisSpacing: isSmallScreen ? 12 : 20,
+                mainAxisSpacing: isSmallScreen ? 12 : 20,
               ),
               itemCount: _projects.length,
               itemBuilder: (context, index) {
