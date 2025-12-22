@@ -139,8 +139,10 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 768;
-    final isTablet = MediaQuery.of(context).size.width >= 768 && MediaQuery.of(context).size.width < 1200;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 768;
+    final isTablet = screenWidth >= 768 && screenWidth < 1200;
+    final isSmallScreen = screenWidth < 1024; // Small screens show icon-only sidebar
     
     return CallbackShortcuts(
       bindings: {
@@ -264,9 +266,9 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                       )
                     : Row(
                         children: [
-                          // Desktop: Left sidebar menu
+                          // Desktop: Left sidebar menu (icon-only on small screens)
                           Container(
-                            width: isTablet ? 200 : 240,
+                            width: isSmallScreen ? 64 : (isTablet ? 200 : 240),
                             decoration: BoxDecoration(
                               color: AppColors.sidebar,
                               border: Border(
@@ -283,6 +285,7 @@ class _EpisodeDetailPageState extends State<EpisodeDetailPage> {
                                   label: tab.label,
                                   isSelected: _selectedTab == index,
                                   onTap: () => _onTabSelected(index),
+                                  showLabel: !isSmallScreen,
                                 );
                               }),
                             ),
@@ -401,6 +404,7 @@ class _SidebarTab extends StatefulWidget {
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool showLabel;
 
   const _SidebarTab({
     required this.icon,
@@ -408,6 +412,7 @@ class _SidebarTab extends StatefulWidget {
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.showLabel = true,
   });
 
   @override
@@ -424,38 +429,53 @@ class _SidebarTabState extends State<_SidebarTab> {
       onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            color: widget.isSelected
-                ? AppColors.primary.withValues(alpha:0.12)
-                : _isHovered
-                    ? AppColors.surfaceElevated.withValues(alpha:0.5)
-                    : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-            border: widget.isSelected
-                ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
-                : null,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                widget.isSelected ? widget.activeIcon : widget.icon,
-                color: widget.isSelected ? AppColors.primary : AppColors.textMuted,
-                size: 18,
-              ),
-              const SizedBox(width: 10),
-              Text(
-                widget.label,
-                style: TextStyle(
-                  color: widget.isSelected ? AppColors.textPrimary : AppColors.textMuted,
-                  fontSize: 13,
-                  fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ],
+        child: Tooltip(
+          message: widget.showLabel ? '' : widget.label,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            margin: EdgeInsets.symmetric(
+              horizontal: widget.showLabel ? 12 : 8,
+              vertical: 2,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.showLabel ? 12 : 8,
+              vertical: widget.showLabel ? 10 : 12,
+            ),
+            decoration: BoxDecoration(
+              color: widget.isSelected
+                  ? AppColors.primary.withValues(alpha:0.12)
+                  : _isHovered
+                      ? AppColors.surfaceElevated.withValues(alpha:0.5)
+                      : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+              border: widget.isSelected
+                  ? Border.all(color: AppColors.primary.withValues(alpha:0.25))
+                  : null,
+            ),
+            child: widget.showLabel
+                ? Row(
+                    children: [
+                      Icon(
+                        widget.isSelected ? widget.activeIcon : widget.icon,
+                        color: widget.isSelected ? AppColors.primary : AppColors.textMuted,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        widget.label,
+                        style: TextStyle(
+                          color: widget.isSelected ? AppColors.textPrimary : AppColors.textMuted,
+                          fontSize: 13,
+                          fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  )
+                : Icon(
+                    widget.isSelected ? widget.activeIcon : widget.icon,
+                    color: widget.isSelected ? AppColors.primary : AppColors.textMuted,
+                    size: 20,
+                  ),
           ),
         ),
       ),
