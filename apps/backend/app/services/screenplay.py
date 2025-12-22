@@ -66,12 +66,12 @@ class ScreenplayService:
             
             # Only create screenplay record after successful generation
             generation_time = time.time() - generation_start_time
-            generation_time_seconds = round(generation_time, 2)
+            generation_time_seconds = int(round(generation_time))
             scene_count = len(scenes)
             
             logger.info(
                 f"Screenplay generation completed for episode {episode_id} "
-                f"in {generation_time_seconds} seconds ({scene_count} scenes)"
+                f"in {generation_time:.2f} seconds ({scene_count} scenes)"
             )
             
             # Create screenplay record with unfolded metadata
