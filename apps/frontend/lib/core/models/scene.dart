@@ -3,8 +3,7 @@ class Scene {
   final String screenplayId;
   final int sceneNumber;
   final String title;
-  final String location;
-  final String timeOfDay;
+  final int durationSeconds;
   final List<String> characters;
   final String action;
   final List<DialogueLine> dialogue;
@@ -17,8 +16,7 @@ class Scene {
     required this.screenplayId,
     required this.sceneNumber,
     required this.title,
-    required this.location,
-    required this.timeOfDay,
+    required this.durationSeconds,
     required this.characters,
     required this.action,
     required this.dialogue,
@@ -33,8 +31,7 @@ class Scene {
       screenplayId: json['screenplay_id'],
       sceneNumber: json['scene_number'],
       title: json['title'],
-      location: json['location'],
-      timeOfDay: json['time_of_day'],
+      durationSeconds: json['duration_seconds'],
       characters: List<String>.from(json['characters']),
       action: json['action'],
       dialogue: (json['dialogue'] as List)
@@ -52,8 +49,7 @@ class Scene {
       'screenplay_id': screenplayId,
       'scene_number': sceneNumber,
       'title': title,
-      'location': location,
-      'time_of_day': timeOfDay,
+      'duration_seconds': durationSeconds,
       'characters': characters,
       'action': action,
       'dialogue': dialogue.map((d) => d.toJson()).toList(),

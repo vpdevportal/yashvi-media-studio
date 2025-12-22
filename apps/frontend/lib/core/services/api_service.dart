@@ -150,6 +150,15 @@ class ApiService {
     throw Exception('Failed to load screenplay scenes');
   }
 
+  Future<void> clearScreenplays(String episodeId) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl$apiPrefix/screenplays/episode/$episodeId'),
+    );
+    if (response.statusCode != 200 && response.statusCode != 204) {
+      throw Exception('Failed to clear screenplays');
+    }
+  }
+
   Future<List<Scene>> generateScreenplay(String episodeId) async {
     final response = await http.post(
       Uri.parse('$baseUrl$apiPrefix/screenplays/episode/$episodeId/generate'),
