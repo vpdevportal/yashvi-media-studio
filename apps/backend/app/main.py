@@ -1,4 +1,11 @@
 import logging
+import warnings
+
+# Suppress CUDA warnings when CUDA is not available (must be before any torch imports)
+warnings.filterwarnings("ignore", message=".*CUDA is not available.*")
+warnings.filterwarnings("ignore", message=".*User provided device_type of 'cuda'.*")
+warnings.filterwarnings("ignore", category=UserWarning, message=".*cuda.*")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
