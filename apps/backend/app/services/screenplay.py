@@ -94,9 +94,8 @@ class ScreenplayService:
                     title=scene.title,
                     duration_seconds=scene.duration_seconds,
                     characters=scene.characters,
-                    action=scene.action,
                     dialogue=scene.dialogue,
-                    visual_notes=scene.visual_notes
+                    prompt=scene.prompt
                 )
                 for scene in scenes
             ]

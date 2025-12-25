@@ -34,9 +34,8 @@ class Scene(Base):
     title = Column(String(255), nullable=False)
     duration_seconds = Column(Integer, nullable=False)  # Estimated scene duration in seconds
     characters = Column(JSON, nullable=False)  # Array of character names
-    action = Column(Text, nullable=False)  # Scene description
     dialogue = Column(JSON, nullable=False)  # Array of {character, line} objects
-    visual_notes = Column(Text, nullable=False)  # For image generation (includes location and time of day)
+    prompt = Column(Text, nullable=False)  # Video generation prompt (combines action and visual elements)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 

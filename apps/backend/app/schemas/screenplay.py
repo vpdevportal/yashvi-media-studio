@@ -10,9 +10,8 @@ class SceneBase(BaseModel):
     title: str
     duration_seconds: int  # Estimated scene duration in seconds
     characters: List[str]
-    action: str  # Scene description
     dialogue: List[Dict[str, str]]  # Array of {character, line} objects
-    visual_notes: str  # For image generation (includes location and time of day)
+    prompt: str  # Video generation prompt (combines action and visual elements)
 
 
 class SceneCreate(SceneBase):
