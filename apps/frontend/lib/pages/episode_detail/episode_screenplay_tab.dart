@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/models/episode.dart';
 import '../../core/models/scene.dart';
 import '../../core/services/api_service.dart';
@@ -259,7 +260,7 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                   : (widget.scenes == null || widget.scenes!.isEmpty)
                       ? SingleChildScrollView(
                           padding: context.responsivePadding,
-                          child: EpisodeEmptyState(
+                          child: const EpisodeEmptyState(
                             title: 'No screenplay generated yet',
                             icon: Icons.description_outlined,
                           ),
@@ -361,23 +362,6 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                     }).toList(),
                   ),
                 ],
-                SizedBox(height: context.isMobile ? 12 : 16),
-                Text(
-                  'Action',
-                  style: TextStyle(
-                    fontSize: context.isMobile ? 13 : 14,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.textMuted,
-                  ),
-                ),
-                SizedBox(height: context.isMobile ? 4 : 4),
-                Text(
-                  scene.action,
-                  style: TextStyle(
-                    fontSize: context.isMobile ? 13 : 14,
-                    height: 1.5,
-                  ),
-                ),
                 if (scene.dialogue.isNotEmpty) ...[
                   SizedBox(height: context.isMobile ? 12 : 16),
                   Text(
@@ -418,8 +402,12 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                 Container(
                   padding: EdgeInsets.all(context.isMobile ? 10 : 12),
                   decoration: BoxDecoration(
-                    color: AppColors.textMuted.withValues(alpha: 0.05),
+                    color: AppColors.primary.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.2),
+                      width: 1,
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,28 +415,56 @@ class _EpisodeScreenplayTabState extends State<EpisodeScreenplayTab> {
                       Row(
                         children: [
                           Icon(
-                            Icons.visibility,
+                            Icons.movie_creation,
                             size: context.isMobile ? 14 : 16,
-                            color: AppColors.textMuted,
+                            color: AppColors.primary,
                           ),
                           SizedBox(width: context.isMobile ? 4 : 4),
-                          Text(
-                            'Visual Notes',
-                            style: TextStyle(
-                              fontSize: context.isMobile ? 11 : 12,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textMuted,
+                          Expanded(
+                            child: Text(
+                              'Video Generation Prompt',
+                              style: TextStyle(
+                                fontSize: context.isMobile ? 11 : 12,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                await Clipboard.setData(ClipboardData(text: scene.prompt));
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: const Text('Prompt copied to clipboard'),
+                                      backgroundColor: AppColors.primary,
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(4),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: Icon(
+                                  Icons.copy,
+                                  size: context.isMobile ? 14 : 16,
+                                  color: AppColors.primary,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: context.isMobile ? 6 : 8),
                       Text(
-                        scene.visualNotes,
+                        scene.prompt,
                         style: TextStyle(
                           fontSize: context.isMobile ? 12 : 13,
                           height: 1.5,
-                          color: AppColors.textMuted,
+                          color: AppColors.textPrimary,
                         ),
                       ),
                     ],

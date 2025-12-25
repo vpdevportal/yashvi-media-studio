@@ -5,9 +5,8 @@ class Scene {
   final String title;
   final int durationSeconds;
   final List<String> characters;
-  final String action;
   final List<DialogueLine> dialogue;
-  final String visualNotes;
+  final String prompt;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -18,9 +17,8 @@ class Scene {
     required this.title,
     required this.durationSeconds,
     required this.characters,
-    required this.action,
     required this.dialogue,
-    required this.visualNotes,
+    required this.prompt,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -33,11 +31,10 @@ class Scene {
       title: json['title'],
       durationSeconds: json['duration_seconds'],
       characters: List<String>.from(json['characters']),
-      action: json['action'],
       dialogue: (json['dialogue'] as List)
           .map((item) => DialogueLine.fromJson(item as Map<String, dynamic>))
           .toList(),
-      visualNotes: json['visual_notes'],
+      prompt: json['prompt'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -51,9 +48,8 @@ class Scene {
       'title': title,
       'duration_seconds': durationSeconds,
       'characters': characters,
-      'action': action,
       'dialogue': dialogue.map((d) => d.toJson()).toList(),
-      'visual_notes': visualNotes,
+      'prompt': prompt,
     };
   }
 }
@@ -81,4 +77,3 @@ class DialogueLine {
     };
   }
 }
-

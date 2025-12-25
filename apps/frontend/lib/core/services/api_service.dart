@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import '../models/project.dart';
 import '../models/episode.dart';
 import '../models/story.dart';
@@ -169,6 +171,39 @@ class ApiService {
       return data.map((json) => Scene.fromJson(json)).toList();
     }
     throw Exception('Failed to generate screenplay');
+  }
+
+  // Video Generation endpoints
+  Future<Uint8List> generateVideo({
+    required Uint8List imageBytes,
+    required String prompt,
+    required String serviceType,
+  }) async {
+    // Create multipart request
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('$baseUrl$apiPrefix/videos/generate'),
+    );
+    
+    // Add image as bytes with proper content type
+    final imageFile = http.MultipartFile.fromBytes(
+      'image',
+      imageBytes,
+      filename: 'image.jpg',
+      contentType: MediaType('image', 'jpeg'),
+    );
+    
+    request.fields['prompt'] = prompt;
+    request.fields['service_type'] = serviceType;
+    request.files.add(imageFile);
+    
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+    
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response.bodyBytes;
+    }
+    throw Exception('Failed to generate video: ${response.body}');
   }
 }
 
